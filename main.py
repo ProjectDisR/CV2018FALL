@@ -7,6 +7,8 @@ Created on Wed Sep 26 21:57:19 2018
 
 import numpy as np
 from skimage.io import imread, imshow, imsave
+import skimage
+import cv2
 
 def rgb2gray(I):
     
@@ -25,6 +27,7 @@ def GaussainKernel(k, sigma):
         
     center = (k-1) / 2
     K = np.indices((k, k))
+#    K = K / (k-1)
     center = np.array([[[center]], [[center]]])
     center = np.repeat(center, k, 1)
     center = np.repeat(center, k, 2)
@@ -66,7 +69,8 @@ def RangeKernel(K, sigma):
         K = -K
         K = K / (2 * sigma**2)
         K = np.exp(K)
-    
+
+        
     K = np.expand_dims(K, axis=2)
     K = np.repeat(K, 3, axis=2)
     
@@ -88,7 +92,10 @@ def JBF(I, G, k, sigma_s, sigma_r):
             h_ = h + r
             w_ = w + r
             Kr = RangeKernel(G[h_-r:h_+r+1, w_-r:w_+r+1], sigma_r)
+            
+            
             K = Ks * Kr
+            
             sum_ = np.sum(K, axis=1)
             sum_ = np.sum(sum_, axis=0)
             
@@ -98,17 +105,21 @@ def JBF(I, G, k, sigma_s, sigma_r):
             rgb = rgb / sum_
             
             I_filtered[h][w]  = rgb
-            
+        
     return I_filtered
 
-I = imread('testdata/0b.png')
-a = JBF(I, I, 7, 3, 0.2)
-a = a.astype('int')
-imsave('a.png', a)
-    
-    
-    
-    
+I = imread('I.png')
+G = imread('G.png')
+I = skimage.color.rgba2rgb(I)*255
+G = skimage.color.rgba2rgb(G)*255
+I_filtered = JBF(I, G, 3, 8, 0.2)
+I_filtered = I_filtered.astype('int')
+imsave('I_filtered.png', I_filtered)
+
+#I_filtered = cv2.ximgproc.jointBilateralFilter(G, I, 50, 0.2, 8)
+#    
+#I_filtered = I_filtered.astype('int')
+#cv2.imwrite('I_filtered.png', I_filtered)
     
     
     
