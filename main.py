@@ -6,9 +6,7 @@ Created on Wed Sep 26 21:57:19 2018
 """
 
 import numpy as np
-from skimage.io import imread, imshow, imsave
-import skimage
-import cv2
+from skimage.io import imread, imsave
 
 def rgb2gray(I, wr=0.299, wg=0.587, wb=0.114):
     
@@ -111,49 +109,65 @@ def JBF(I, G, k, sigma_s, sigma_r):
         
     return I_filtered
 
-I = imread('testdata/0b.png')
-I = I / 255
-sigma = [(i, j) for i in [1, 2, 3] for j in [0.05, 0.1, 0.2]]
-
-local_minima = np.zeros((11, 11))
-
-for sigma_s, sigma_r in sigma:
+def rgb2gray_X(I, k):
     
-    I_JBFself = JBF(I, I, 3, sigma_s, sigma_r)
-    delta = np.full((13, 13), 5.0)
-    for i in range(11):
-        for j in range(11-i):
-            I_gray = rgb2gray(I, 0.1*i, 0.1*j, 1 - 0.1*i - 0.1*j)
-            I_JBFgray = JBF(I, I_gray, 3, sigma_s, sigma_r)
-            delta[i+1][j+1] = np.average(np.sum((I_JBFself-I_JBFgray)**2, axis=2))
-            print(0.1*i, 0.1*j, 1 - 0.1*i - 0.1*j)
-    mid = delta[1:12, 1:12]
-    is_local_minima = mid < delta[:11, :11]
-    is_local_minima = np.logical_and(is_local_minima, mid < delta[:11, 1:12])
-    is_local_minima = np.logical_and(is_local_minima, mid < delta[:11, 2:13])
-    is_local_minima = np.logical_and(is_local_minima, mid < delta[1:12, :11])
-    is_local_minima = np.logical_and(is_local_minima, mid < delta[1:12, 2:13])
-    is_local_minima = np.logical_and(is_local_minima, mid < delta[2:13, :11])
-    is_local_minima = np.logical_and(is_local_minima, mid < delta[2:13, 1:12])
-    is_local_minima = np.logical_and(is_local_minima, mid < delta[2:13, 2:13])
+    I = I / 255
+    sigma = [(i, j) for i in [1, 2, 3] for j in [0.05, 0.1, 0.2]]
+    local_minima = np.zeros((11, 11))
     
-    local_minima += is_local_minima
+    for sigma_s, sigma_r in sigma:
+    
+        I_JBFself = JBF(I, I, k, sigma_s, sigma_r)
+        delta = np.full((13, 13), 5.0)
+        
+        for i in range(11):
+            for j in range(11-i):
+                
+                I_gray = rgb2gray(I, 0.1*i, 0.1*j, 1 - 0.1*i - 0.1*j)
+                I_JBFgray = JBF(I, I_gray, k, sigma_s, sigma_r)
+                delta[i+1][j+1] = np.average(np.sum((I_JBFself-I_JBFgray)**2, axis=2))
+                
+        mid = delta[1:12, 1:12]
+        is_local_minima = mid < delta[:11, :11]
+        is_local_minima = np.logical_and(is_local_minima, mid < delta[:11, 1:12])
+        is_local_minima = np.logical_and(is_local_minima, mid < delta[:11, 2:13])
+        is_local_minima = np.logical_and(is_local_minima, mid < delta[1:12, :11])
+        is_local_minima = np.logical_and(is_local_minima, mid < delta[1:12, 2:13])
+        is_local_minima = np.logical_and(is_local_minima, mid < delta[2:13, :11])
+        is_local_minima = np.logical_and(is_local_minima, mid < delta[2:13, 1:12])
+        is_local_minima = np.logical_and(is_local_minima, mid < delta[2:13, 2:13])
+        
+        local_minima += is_local_minima
+        
+    wr, wg = np.unravel_index(np.argsort(local_minima.reshape(-1)), (11, 11))
+    wr = wr[::-1]
+    wg = wg[::-1]
+    I = I * 255
+    I_gray_x = []
+    
+    for i in range(3):
+        print(0.1*wr[i], 0.1*wg[i], local_minima[wr[i], wg[i]])
+        I_gray = rgb2gray(I, 0.1*wr[i], 0.1*wg[i], 1-0.1*wr[i]-0.1*wg[i])
+        I_gray = I_gray.astype('uint8')
+    
+        I_gray_x.append(I_gray)
+        
+    return I_gray_x
 
-I = imread('testdata/0b.png')
-wr, wg = np.unravel_index(np.argsort(local_minima.reshape(-1)), (11, 11))
-wr = wr[::-1]
-wg = wg[::-1]
-for i in range(3):
-    print(wr[i], wg[i], local_minima[wr[i], wg[i]])
-    imsave('testdata/0b{}.png'.format(i), rgb2gray(I, 0.1*wr[i], 0.1*wg[i], 1-0.1*wr[i]-0.1*wg[i]))
+if __name__ == '__main__':
+
+    subs = ['a', 'b', 'c']
     
-#I = imread('I.png')
-#G = imread('G.png')
-#
-#I = skimage.color.rgba2rgb(I)*255
-#G = skimage.color.rgba2rgb(G)*255
-#I_filtered = JBF(I, G, 25, 8, 0.2)
-#I_filtered = I_filtered.astype('uint8')
-#imsave('I_filtered.png', I_filtered)
+    for sub in subs:
+        
+        I = imread('testdata/1{}.png'.format(sub))
+        I_gray = rgb2gray(I)
+        I_gray = I_gray.astype('uint8')
+        imsave('testdata/1{}_y.png'.format(sub), I_gray)
+        
+        I_gray_x = rgb2gray_X(I, 3)
+    
+        for i in range(3):
+            imsave('testdata/1{}_y{}.png'.format(sub ,i+1), I_gray_x[i])
 
     
