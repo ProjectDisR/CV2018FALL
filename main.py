@@ -114,9 +114,7 @@ G = imread('G.png')
 
 I = skimage.color.rgba2rgb(I)*255
 G = skimage.color.rgba2rgb(G)*255
-I_filtered = JBF(I, G, 3, 8, 0.2)
-for i in range(4):
-    I_filtered = JBF(I_filtered, G, 3, 8, 0.2)
+I_filtered = JBF(I, G, 25, 8, 0.2)
 I_filtered = I_filtered.astype('uint8')
 imsave('I_filtered.png', I_filtered)
 
