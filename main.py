@@ -46,7 +46,6 @@ def GaussainKernel(k, sigma):
 
 def RangeKernel(K, sigma):
     
-    K = K / 255
     k = K.shape[0]
     center = int((k-1) / 2)
     
@@ -85,7 +84,10 @@ def JBF(I, G, k, sigma_s, sigma_r):
     
     r = int((k-1) / 2)
     I = np.pad(I, [(r, r), (r, r), (0, 0)], 'reflect')
-    G = np.pad(G, [(r, r), (r, r), (0, 0)], 'reflect')
+    if len(G.shape) == 2:
+        G = np.pad(G, [(r, r), (r, r)], 'reflect')
+    else:    
+        G = np.pad(G, [(r, r), (r, r), (0, 0)], 'reflect')
 
     Ks = GaussainKernel(k, sigma_s)
     
@@ -109,13 +111,42 @@ def JBF(I, G, k, sigma_s, sigma_r):
         
     return I_filtered
 
-I = imread('I.png')
-G = imread('G.png')
+I = imread('testdata/0b.png')
+I = I / 255
+sigma = [(i, j) for i in [1, 2, 3] for j in [0.05, 0.1, 0.2]]
 
-I = skimage.color.rgba2rgb(I)*255
-G = skimage.color.rgba2rgb(G)*255
-I_filtered = JBF(I, G, 25, 8, 0.2)
-I_filtered = I_filtered.astype('uint8')
-imsave('I_filtered.png', I_filtered)
+local_minima = np.zeros((11, 11))
+
+
+for sigma_s, sigma_r in sigma:
+    
+    I_JBFself = JBF(I, I, 3, sigma_s, sigma_r)
+    delta = np.full((13, 13), 5.0)
+    for i in range(11):
+        for j in range(11-i):
+            I_gray = rgb2gray(I, 0.1*i, 0.1*j, 1 - 0.1*i - 0.1*j)
+            I_JBFgray = JBF(I, I_gray, 3, sigma_s, sigma_r)
+            delta[i+1][j+1] = np.average(np.sum((I_JBFself-I_JBFgray)**2, axis=2))
+            print(0.1*i, 0.1*j, 1 - 0.1*i - 0.1*j)
+    mid = delta[1:12, 1:12]
+    is_local_minima = mid < delta[:11, :11]
+    is_local_minima = np.logical_and(is_local_minima, mid < delta[:11, 1:12])
+    is_local_minima = np.logical_and(is_local_minima, mid < delta[:11, 2:13])
+    is_local_minima = np.logical_and(is_local_minima, mid < delta[1:12, :11])
+    is_local_minima = np.logical_and(is_local_minima, mid < delta[1:12, 2:13])
+    is_local_minima = np.logical_and(is_local_minima, mid < delta[2:13, :11])
+    is_local_minima = np.logical_and(is_local_minima, mid < delta[2:13, 1:12])
+    is_local_minima = np.logical_and(is_local_minima, mid < delta[2:13, 2:13])
+    
+    local_minima += is_local_minima
+    break
+#I = imread('I.png')
+#G = imread('G.png')
+#
+#I = skimage.color.rgba2rgb(I)*255
+#G = skimage.color.rgba2rgb(G)*255
+#I_filtered = JBF(I, G, 25, 8, 0.2)
+#I_filtered = I_filtered.astype('uint8')
+#imsave('I_filtered.png', I_filtered)
 
     
