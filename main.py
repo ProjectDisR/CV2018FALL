@@ -117,7 +117,6 @@ sigma = [(i, j) for i in [1, 2, 3] for j in [0.05, 0.1, 0.2]]
 
 local_minima = np.zeros((11, 11))
 
-
 for sigma_s, sigma_r in sigma:
     
     I_JBFself = JBF(I, I, 3, sigma_s, sigma_r)
@@ -139,7 +138,15 @@ for sigma_s, sigma_r in sigma:
     is_local_minima = np.logical_and(is_local_minima, mid < delta[2:13, 2:13])
     
     local_minima += is_local_minima
-    break
+
+I = imread('testdata/0b.png')
+wr, wg = np.unravel_index(np.argsort(local_minima.reshape(-1)), (11, 11))
+wr = wr[::-1]
+wg = wg[::-1]
+for i in range(3):
+    print(wr[i], wg[i], local_minima[wr[i], wg[i]])
+    imsave('testdata/0b{}.png'.format(i), rgb2gray(I, 0.1*wr[i], 0.1*wg[i], 1-0.1*wr[i]-0.1*wg[i]))
+    
 #I = imread('I.png')
 #G = imread('G.png')
 #
