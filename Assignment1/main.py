@@ -117,7 +117,7 @@ def rgb2gray_X(I):
     
     for sigma_s, sigma_r in sigma:
         
-        k = int(6*sigma_s + 1)
+        k = 7
         
         I_JBFself = JBF(I, I, k, sigma_s, sigma_r)
         delta = np.full((13, 13), 5.0)
