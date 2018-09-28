@@ -6,7 +6,7 @@
 
 ## Advanced rgb2gray
 
-### Paper: Decolorization: Is rgb2gray() Out?<sup>[[1](#references)]</sup> [[project](https://ybsong00.github.io/siga13tb/)][[pdf](https://ybsong00.github.io/siga13tb/siga13tb_final.pdf)]
+### Paper: Decolorization: Is rgb2gray() Out?<sup>[[1](#1)]</sup> [[project](https://ybsong00.github.io/siga13tb/)][[pdf](https://ybsong00.github.io/siga13tb/siga13tb_final.pdf)]
 ![Overview](Overview.png)
 
 ## Results
@@ -24,6 +24,4 @@ Input | Conventional | Advanced 1 | Advanced 2 | Advanced 3
 * scikit-image
 
 ## References
-<one name='1'>
-  [1] Y. Song, L. Bao, X. Xu, and Q. Yang, “Decolorization: Is rgb2gray()  out?” in Proc. ACM SIGGRAPH Asia Tech. Briefs, 2013, Art. ID 15.
-<\one>
+<one name='1'>[1] Y. Song, L. Bao, X. Xu, and Q. Yang, “Decolorization: Is rgb2gray()  out?” in Proc. ACM SIGGRAPH Asia Tech. Briefs, 2013, Art. ID 15.</one>
