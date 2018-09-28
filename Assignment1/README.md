@@ -24,4 +24,6 @@ Input | Conventional | Advanced 1 | Advanced 2 | Advanced 3
 * scikit-image
 
 ## References
-* [1] Y. Song, L. Bao, X. Xu, and Q. Yang, “Decolorization: Is rgb2gray()  out?” in Proc. ACM SIGGRAPH Asia Tech. Briefs, 2013, Art. ID 15.
+<one name='1'>
+  [1] Y. Song, L. Bao, X. Xu, and Q. Yang, “Decolorization: Is rgb2gray()  out?” in Proc. ACM SIGGRAPH Asia Tech. Briefs, 2013, Art. ID 15.
+<\one>
