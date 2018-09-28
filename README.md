@@ -1,3 +1,4 @@
 # CV2018FALL
-## The repository for EEE5053 at NTU: [Computer Vision: from recognition to geometry](http://media.ee.ntu.edu.tw/courses/cv/18F/)
+## The repository for EEE5053: [Computer Vision: from recognition to geometry](http://media.ee.ntu.edu.tw/courses/cv9/18F/)
+### Instructors : [Prof. Shao-Yi Chien](http://media.ee.ntu.edu.tw/member/#nevigator) & [Prof. Yu-Chiang Frank Wang](http://vllab.ee.ntu.edu.tw/)
 ## Assignment 1 : [Advanced Color-to-Gray Conversion](./Assignment1)
