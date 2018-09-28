@@ -1,5 +1,5 @@
 # Assignment 1: Advanced Color-to-Gray Conversion
-Assignment 1: [Advanced Color-to-Gray Conversion](http://media.ee.ntu.edu.tw/courses/cv/18F/hw/cv2018_hw01.pdf)
+Advanced Color-to-Gray Conversion[slides](http://media.ee.ntu.edu.tw/courses/cv/18F/hw/cv2018_hw01.pdf)
 ## Conventional rgb2gray
 
 ### Y = 0.299R + 0.587G + 0.114B
