@@ -19,5 +19,9 @@ Input | Conventional | Advanced 1 | Advanced 2 | Advanced 3
 ![1b](testdata/1b.png) | ![1b_y](testdata/1b_y.png) | ![1b_y1](testdata/1b_y1.png) (0, 0.7, 0.3) votes=3 | ![1b_y2](testdata/1b_y2.png) (0.1, 0.5, 0.4) votes=3 | ![1b_y3](testdata/1b_y3.png) (0.3, 0.3, 0.4) votes=2
 ![1c](testdata/1c.png) | ![1c_y](testdata/1c_y.png) | ![1c_y1](testdata/1c_y1.png) (0.5, 0.5, 0) votes=3 | ![1c_y2](testdata/1c_y2.png) (0.6, 0.4, 0) votes=3 | ![1c_y3](testdata/1c_y3.png) (0.9, 0.1, 0) votes=3
 
+## Requirements
+* numpy
+* scikit-image
+
 ## References
 [1] Y. Song, L. Bao, X. Xu, and Q. Yang, “Decolorization: Is rgb2gray()  out?” in Proc. ACM SIGGRAPH Asia Tech. Briefs, 2013, Art. ID 15.
