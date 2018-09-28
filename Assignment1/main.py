@@ -109,14 +109,16 @@ def JBF(I, G, k, sigma_s, sigma_r):
         
     return I_filtered
 
-def rgb2gray_X(I, k):
+def rgb2gray_X(I):
     
     I = I / 255
     sigma = [(i, j) for i in [1, 2, 3] for j in [0.05, 0.1, 0.2]]
     local_minima = np.zeros((11, 11))
     
     for sigma_s, sigma_r in sigma:
-    
+        
+        k = int(6*sigma + 1)
+        
         I_JBFself = JBF(I, I, k, sigma_s, sigma_r)
         delta = np.full((13, 13), 5.0)
         
@@ -165,7 +167,7 @@ if __name__ == '__main__':
         I_gray = I_gray.astype('uint8')
         imsave('testdata/1{}_y.png'.format(sub), I_gray)
         
-        I_gray_x = rgb2gray_X(I, 3)
+        I_gray_x = rgb2gray_X(I)
     
         for i in range(3):
             imsave('testdata/1{}_y{}.png'.format(sub ,i+1), I_gray_x[i])
