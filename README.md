@@ -1,3 +1,3 @@
 # CV2018FALL
 
-## Assignment 1 : [`Advanced Color-to-Gray Conversion`](./Assignment1/README.md)
+## Assignment 1 : [`Advanced Color-to-Gray Conversion`](./Assignment1)
