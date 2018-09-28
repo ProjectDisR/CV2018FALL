@@ -2,7 +2,7 @@
 ## Conventional rgb2gray
 ### Y = 0.299R + 0.587G + 0.114B
 ## Advanced rgb2gray
-### Paper: Decolorization: Is rgb2gray()Out?[1] [[pdf](https://ybsong00.github.io/siga13tb/siga13tb_final.pdf)]
+### Paper: Decolorization: Is rgb2gray()Out?<sup>[1]</sup> [[pdf](https://ybsong00.github.io/siga13tb/siga13tb_final.pdf)]
 ![Overview](Overview.png)
 
 inproceedings{
