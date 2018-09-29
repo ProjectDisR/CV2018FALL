@@ -18,11 +18,11 @@ Advanced Color-to-Gray Conversion [[slides](http://media.ee.ntu.edu.tw/courses/c
 
 (wr, wg, wb)
 
-Input | Conventional | Advanced 1 | Advanced 2 | Advanced 3
---- | --- | --- | --- | --- 
-![1a](testdata/1a.png) | ![1a_y](testdata/1a_y.png) | ![1a_y1](testdata/1a_y1.png) (1, 0, 0) votes=7 | ![1a_y2](testdata/1a_y2.png) (0, 0, 1) votes=6 | ![1a_y3](testdata/1a_y3.png) (0, 0.2, 0.8) votes=3
-![1b](testdata/1b.png) | ![1b_y](testdata/1b_y.png) | ![1b_y1](testdata/1b_y1.png) (0, 0.6, 0.4) votes=3 | ![1b_y2](testdata/1b_y2.png) (0.1, 0.5, 0.4) votes=3 | ![1b_y3](testdata/1b_y3.png) (0.7, 0.1, 0.2) votes=2
-![1c](testdata/1c.png) | ![1c_y](testdata/1c_y.png) | ![1c_y1](testdata/1c_y1.png) (0.6, 0.4, 0) votes=4 | ![1c_y2](testdata/1c_y2.png) (0.8, 0.2, 0) votes=2 | ![1c_y3](testdata/1c_y3.png) (0.5, 0.4, 0.1) votes=1
+Image Name | Input | Conventional | Advanced 1 | Advanced 2 | Advanced 3
+--- | --- | --- | --- | --- | --- 
+1a.png | ![1a](testdata/1a.png) | ![1a_y](testdata/1a_y.png) | ![1a_y1](testdata/1a_y1.png) (1, 0, 0) votes=7 | ![1a_y2](testdata/1a_y2.png) (0, 0, 1) votes=6 | ![1a_y3](testdata/1a_y3.png) (0, 0.2, 0.8) votes=3
+1b.png | ![1b](testdata/1b.png) | ![1b_y](testdata/1b_y.png) | ![1b_y1](testdata/1b_y1.png) (0, 0.6, 0.4) votes=3 | ![1b_y2](testdata/1b_y2.png) (0.1, 0.5, 0.4) votes=3 | ![1b_y3](testdata/1b_y3.png) (0.7, 0.1, 0.2) votes=2
+1c.png | ![1c](testdata/1c.png) | ![1c_y](testdata/1c_y.png) | ![1c_y1](testdata/1c_y1.png) (0.6, 0.4, 0) votes=4 | ![1c_y2](testdata/1c_y2.png) (0.8, 0.2, 0) votes=2 | ![1c_y3](testdata/1c_y3.png) (0.5, 0.4, 0.1) votes=1
 
 ## Requirements
 * numpy
