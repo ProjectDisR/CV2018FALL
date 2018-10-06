@@ -130,14 +130,12 @@ def rgb2gray_X(I):
                 delta[i+1][j+1] = np.average(np.sum((I_JBFself-I_JBFgray)**2, axis=2))
                 
         mid = delta[1:12, 1:12]
-        is_local_minima = mid < delta[:11, :11]
-        is_local_minima = np.logical_and(is_local_minima, mid < delta[:11, 1:12])
+        is_local_minima = mid < delta[:11, 1:12]
         is_local_minima = np.logical_and(is_local_minima, mid < delta[:11, 2:13])
         is_local_minima = np.logical_and(is_local_minima, mid < delta[1:12, :11])
         is_local_minima = np.logical_and(is_local_minima, mid < delta[1:12, 2:13])
         is_local_minima = np.logical_and(is_local_minima, mid < delta[2:13, :11])
         is_local_minima = np.logical_and(is_local_minima, mid < delta[2:13, 1:12])
-        is_local_minima = np.logical_and(is_local_minima, mid < delta[2:13, 2:13])
         
         local_minima += is_local_minima
         
