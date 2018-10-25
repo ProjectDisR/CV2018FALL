@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Oct 24 14:34:49 2018
+Created on Thu Oct 25 14:08:24 2018
 
 @author: user
 """
@@ -58,6 +58,42 @@ class PCA():
         
         return X
 
+class LDA():
+    
+    def __init__(self):
+        return
+
+    def fit(self, X, y):
+        X = X.copy()
+        
+        classes = np.unique(y)
+        mean = X.mean(axis=0)
+        
+        Sw = np.zeros((X.shape[1], X.shape[1]), dtype=np.float32)
+        Sb = np.zeros((X.shape[1], X.shape[1]), dtype=np.float32)
+        
+        for c in classes:
+            Xc = X[y==c,:]
+            meanc = Xc.mean(axis=0)
+            Sw = Sw + np.dot((Xc-meanc).T, (Xc-meanc))
+            Sb = Sb + (Xc.shape[0] * np.dot((meanc - mean).T, (meanc - mean)))
+            
+        evals, evecs = np.linalg.eig(np.linalg.inv(Sw)*Sb)
+        idx = np.argsort(evals.real)[::-1]
+        evecs = evecs[:,idx]
+        evals = evals[idx]
+        
+        self.T = evecs[:, :classes.shape[0]-1]
+        self.evals = evals
+
+        return
+    
+    def transform(self, X, dims):
+
+        X_ = np.dot(X, self.T[:, :dims])
+        
+        return X_
+    
 if __name__ == '__main__':
     vis = visdom.Visdom(env='hw2')
     
@@ -89,18 +125,30 @@ if __name__ == '__main__':
     testX = np.array(testX)
     
     pca = PCA()
+    lda = LDA()
     pca.fit(trainX)
-    
-    mean = np.reshape(pca.mean, (h, w))
-    mean = mean.astype('uint8')
-    imsave('mean.png', mean)
+    trainX_ = pca.transform(trainX, 240)
+    lda.fit(trainX_, trainy)
     
     for i in range(5):
-        eigen = pca.T[:, i]
+        eigen = lda.T[:, i:i+1]
+        eigen = np.dot(pca.T[:, :eigen.shape[0]], eigen)
         eigen = np.reshape(eigen, (h, w))
         eigen = (eigen-np.min(eigen))*255 / (np.max(eigen)-np.min(eigen))
         eigen = eigen.astype('uint8')
-        imsave('eigen{}.png'.format(i+1), eigen)
+        imsave('fisher{}.png'.format(i+1), eigen)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    testX_ = pca.transform(testX, 240)
+    testX_ = lda.transform(testX_, 30)
+    vis.scatter(TSNE().fit_transform(testX_), testy, win='PCA+LDA', opts={'title': 'PCA+LDA'})
     
     
     
@@ -111,44 +159,7 @@ if __name__ == '__main__':
     
     
     
-    
-    
-    
-    
-    
-    I = imread(os.path.join('hw2-2_data/', '8_6.png'))
-    I = np.reshape(I, (1, -1))
-    I = I.astype('float32')
-    
-    for i in [5, 50, 150, 279]:
-        I_recons = pca.reconstruct(pca.transform(I, i))
-        imsave('8_6_{}.png'.format(i), np.reshape(I_recons, (h, w)).astype('uint8'))
-        print(i, np.mean((I-I_recons)**2))
-
-
-
-
-
-
-
-
-
-
-
-    testX_ = pca.transform(testX, 100)
-    vis.scatter(TSNE().fit_transform(testX_), testy, win='PCA', opts={'title': 'PCA'})
-
-
-
-
-
-    
-    
-    
-    
-    
-    
-    kfold = KFold(n_splits=3) 
+    kfold = KFold(n_splits=3)
     folder_ls = ['0/', '1/', '2/']
     
     k_ls = [1, 3, 5]
@@ -191,23 +202,34 @@ if __name__ == '__main__':
             validX = np.array(validX)
             
             pca = PCA()
+            lda = LDA()
             pca.fit(trainX)
-            trainX_ = pca.transform(trainX, n)
+            trainX_ = pca.transform(trainX, trainX.shape[0]-40)
+            lda.fit(trainX_, trainy)
+            trainX_ = lda.transform(trainX_, n)
             knn = KNeighborsClassifier(n_neighbors=k)
             knn.fit(trainX_, trainy) 
 
-            validX_ = pca.transform(validX, n)
+            validX_ = pca.transform(validX, trainX.shape[0]-40)
+            validX_ = lda.transform(validX_, n)
             accuracy.append(knn.score(validX_, validy))
             
         accuracy.append(np.mean(np.array(accuracy)))
         print(k, n, accuracy[0], accuracy[1], accuracy[2], accuracy[3])
-    
-    
-    
-    
-    
-    
-    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     trainX = []
     trainy = []
     testX = []
@@ -233,10 +255,14 @@ if __name__ == '__main__':
     testX = np.array(testX)
     
     pca = PCA()
+    lda = LDA()
     pca.fit(trainX)
-    trainX_ = pca.transform(trainX, 39)
-    knn = KNeighborsClassifier(n_neighbors=1)
+    trainX_ = pca.transform(trainX, trainX.shape[0]-40)
+    lda.fit(trainX_, trainy)
+    trainX_ = lda.transform(trainX_, 39)
+    knn = KNeighborsClassifier(n_neighbors=5)
     knn.fit(trainX_, trainy) 
 
-    testX_ = pca.transform(testX, 39)
+    testX_ = pca.transform(testX, trainX.shape[0]-40)
+    testX_ = lda.transform(testX_, 39)
     print(knn.score(testX_, testy))
