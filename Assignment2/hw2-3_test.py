@@ -12,6 +12,7 @@ import numpy as np
 import torch as t
 from torch.utils import data
 from torch.utils.data import DataLoader
+import torchvision as tv
 
 from skimage.io import imread
 
@@ -60,7 +61,12 @@ class TestData(data.Dataset):
     def __init__(self, root):
         
         self.root = root
-        self.img_name_ls = os.listdir(self.root).sort()
+        self.img_name_ls = os.listdir(self.root)
+        self.img_name_ls.sort()
+        self.transforms = tv.transforms.Compose([
+                tv.transforms.ToTensor(),
+                tv.transforms.Normalize([0.5], [0.5])
+                ])
         
         return    
     
@@ -96,7 +102,7 @@ def test(csv, **kwargs):
         label_ls += list(predicts.detach().numpy())
         id_ls += img_name
     
-    with open(csv) as outfile:
+    with open(csv, 'w') as outfile:
         outfile.write('id, label\n')
         for i in range (len(id_ls)):
             outfile.write('{},{}\n'.format(id_ls[i], label_ls[i]))
@@ -104,4 +110,4 @@ def test(csv, **kwargs):
     return
 
 if __name__ == '__main__':
-    test(csv=sys.argv[2], data_root=sys.argv[1], ckpts_root='lenet5_50.ckpt')
+    test(csv=sys.argv[2], data_root=sys.argv[1], ckpts_root='lenet5_e50.ckpt')
