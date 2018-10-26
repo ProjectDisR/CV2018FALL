@@ -25,9 +25,9 @@ def train(**kwargs):
     opt = DefaultConfig()
     opt.parse(kwargs)
     
-    train_dataset = MNISTDigits(opt.data_root + 'train/')
+    train_dataset = MNISTDigits(os.path.join(opt.data_root, 'train/'))
     train_dataloader = DataLoader(train_dataset, opt.batch_size, shuffle=True)
-    valid_dataset = MNISTDigits(opt.data_root + 'valid/')
+    valid_dataset = MNISTDigits(os.path.join(opt.data_root, 'valid/'))
     valid_dataloader = DataLoader(valid_dataset, opt.batch_size, shuffle=False)
        
     lenet5 = Lenet5() 
@@ -145,9 +145,9 @@ def test(**kwargs):
     opt = DefaultConfig()
     opt.parse(kwargs)
     
-    train_dataset = MNISTDigits(opt.data_root + 'train/')
+    train_dataset = MNISTDigits(os.path.join(opt.data_root, 'train/'))
     train_dataloader = DataLoader(train_dataset, opt.batch_size, shuffle=False)
-    valid_dataset = MNISTDigits(opt.data_root + 'valid/')
+    valid_dataset = MNISTDigits(os.path.join(opt.data_root, 'valid/'))
     valid_dataloader = DataLoader(valid_dataset, opt.batch_size, shuffle=False)
     
     lenet5 = Lenet5()

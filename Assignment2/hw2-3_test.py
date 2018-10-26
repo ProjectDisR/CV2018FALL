@@ -12,7 +12,6 @@ import numpy as np
 import torch as t
 from torch.utils import data
 from torch.utils.data import DataLoader
-import torchvision as tv
 
 from skimage.io import imread
 

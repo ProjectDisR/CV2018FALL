@@ -71,7 +71,7 @@ if __name__ == '__main__':
     pca = PCA()
     pca.fit(trainX)
     
-    I = imread(os.path.join(sys.argv[2]))
+    I = imread(sys.argv[2])
     h, w = I.shape
     I = np.reshape(I, (1, -1))
     I = I.astype('float32')
