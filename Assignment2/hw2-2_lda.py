@@ -6,14 +6,9 @@ Created on Thu Oct 25 14:08:24 2018
 """
 import os
 import sys
-import itertools
 
 import numpy as np
 from scipy import linalg as LA
-
-from sklearn.manifold import TSNE
-from sklearn.model_selection import KFold
-from sklearn.neighbors import KNeighborsClassifier
 
 from skimage.io import imread, imsave
 
