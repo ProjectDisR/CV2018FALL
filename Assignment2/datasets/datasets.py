@@ -88,7 +88,7 @@ class MNISTDigits1000(data.Dataset):
 
 if __name__ == '__main__': 
    print('Preprocessing data or check whether My_Dataset works!')
-#    root = 'hw2-3_data/train'
+#    root = 'hw2-3_data/train/'
 #    dataset = MNISTDigits(root)
 #    data_iter = iter(dataset)
 #    I, label = next(data_iter)
