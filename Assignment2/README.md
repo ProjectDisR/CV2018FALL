@@ -1,8 +1,8 @@
 # Assignment 2: ML & DL Basics
 ML & DL Basics [[slides](http://media.ee.ntu.edu.tw/courses/cv/18F/hw/cv2018_hw02.pdf)]
 * ROC Curve [[link](#roc-curve)]
-* PCA & LDA [[link](#pca-&-lda)]
-* Object Recognition using CNN [[link](#object-recognition-using-CNN)]
+* PCA & LDA [[link](#pca--lda)]
+* Object Recognition using CNN [[link](#object-recognition-using-cnn)]
 
 ## ROC Curve
 
@@ -81,6 +81,8 @@ EigenFace | FisherFace
 ![pca_tsne](report/hw2-2/pca_tsne.png) | ![fisher_tsne](report/hw2-2/lda_tsne.png)
 
 ## Object Recognition using CNN
+### Paper: Gradient-Based Learning Applied to Document Recognition <sup>[[3](#references)]</sup> [[pdf](http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf)]
+
 Dataset: MNIST
 
 
@@ -88,3 +90,5 @@ Dataset: MNIST
 [1] Turk, M.A., Pentland, A.P.: Face recognition using eigenfaces. In: IEEE Conferenceon Computer Vision and Pattern Recognition. (1991)
 
 [2] P. N. Belhumeur, J. P. Hespanha, and D. J. Kriegman: Eigenfaces vs. fisherfaces: recognition using class specific linear projection. IEEE Transactions on Pattern Analysis and Machine Intelligence. (1997)
+
+[3] Y. LeCun, L. Bottou, Y. Bengio, and P. Haffner: Gradient-based learning applied to document recognition. In Proceedings of the IEEE. (1998)
