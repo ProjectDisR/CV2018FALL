@@ -85,6 +85,36 @@ EigenFace | FisherFace
 
 Dataset: MNIST
 
+### Learning Curve
+
+Loss | Accuracy
+--- | ---
+![loss](report/hw2-3/loss.png) | ![accuracy](report/hw2-3/accuracy.png)
+
+Accuracy
+Training | Validation
+--- | ---
+99.92% | 98.67%
+
+### Filter Visualization
+Conv1
+
+![conv1](report/hw2-3/conv1filters.png)
+
+Conv2
+
+![conv2](report/hw2-3/conv2filters.png)
+
+### Feature Visualization
+Conv1
+
+![conv1](report/hw2-3/conv1features.png)
+
+Conv2
+
+![conv2](report/hw2-3/conv2features.png)
+
+
 
 ## References
 [1] Turk, M.A., Pentland, A.P.: Face recognition using eigenfaces. In: IEEE Conferenceon Computer Vision and Pattern Recognition. (1991)
