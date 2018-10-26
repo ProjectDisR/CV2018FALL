@@ -17,6 +17,8 @@ class Visualizer():
         self.vis = visdom.Visdom(env=env)
         self.names = set()
         self.log_text = ''
+        
+        return
     
     def add_names(self, *args):
         
@@ -33,7 +35,7 @@ class Visualizer():
         else:
             opts = {'xlabel':'epoch', 'ylabel':name} 
             self.vis.line(Y=np.array([value]), X=np.array([epoch]), win=name,
-                          opts=opts, update=None if epoch == 0 else 'append')
+                          opts=opts, update='append')
             
         return
     

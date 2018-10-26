@@ -173,7 +173,9 @@ def test(**kwargs):
         predicts = t.argmax(lenet5(I)[0], dim=1)
         n_yes += t.sum(predicts==labels).item()
         
-    print('train accuracy: {}'.format(n_yes/n_valids))
+    print('valid accuracy: {}'.format(n_yes/n_valids))
+    
+    return
 
 if __name__ == '__main__':
     fire.Fire()

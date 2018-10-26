@@ -19,6 +19,8 @@ class Lenet5(nn.Module):
         self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, 10)
         
+        return
+        
     def forward(self, x):
         
         map1 = F.relu(self.conv1(x))
