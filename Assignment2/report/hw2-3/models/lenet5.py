@@ -37,8 +37,5 @@ class Lenet5(nn.Module):
     
 if __name__ == '__main__':
     print('Check if My_Moel works!')
-    a = t.randn(2, 1, 28, 28)
-    lenet5 = Lenet5()
-    b = lenet5.forward(a)[0]
-    print(b.size())
+    print(Lenet5())
 

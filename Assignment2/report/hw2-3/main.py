@@ -140,5 +140,40 @@ def FeatureVisualization(ckpt_root):
     
     return
 
+def test(**kwargs):
+    
+    opt = DefaultConfig()
+    opt.parse(kwargs)
+    
+    train_dataset = MNISTDigits(opt.data_root + 'train/')
+    train_dataloader = DataLoader(train_dataset, opt.batch_size, shuffle=False)
+    valid_dataset = MNISTDigits(opt.data_root + 'valid/')
+    valid_dataloader = DataLoader(valid_dataset, opt.batch_size, shuffle=False)
+    
+    lenet5 = Lenet5()
+    lenet5.load_state_dict(t.load(os.path.join(opt.ckpts_root, 'lenet5_e{}.ckpt'.format(opt.n_epoch))))
+    lenet5 = lenet5.eval()
+    
+    n_trains = 0
+    n_yes = 0
+    
+    for I, labels in train_dataloader:
+            
+        n_trains += labels.size()[0]
+        predicts = t.argmax(lenet5(I)[0], dim=1)
+        n_yes += t.sum(predicts==labels).item()
+        
+    print('train accuracy: {}'.format(n_yes/n_trains))
+    
+    n_valids = 0
+    n_yes = 0
+    for I, labels in valid_dataloader:
+            
+        n_valids += labels.size()[0]
+        predicts = t.argmax(lenet5(I)[0], dim=1)
+        n_yes += t.sum(predicts==labels).item()
+        
+    print('train accuracy: {}'.format(n_yes/n_valids))
+
 if __name__ == '__main__':
     fire.Fire()
