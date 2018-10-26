@@ -92,6 +92,7 @@ Loss | Accuracy
 ![loss](report/hw2-3/loss.png) | ![accuracy](report/hw2-3/accuracy.png)
 
 Accuracy
+
 Training | Validation
 --- | ---
 99.92% | 98.67%
