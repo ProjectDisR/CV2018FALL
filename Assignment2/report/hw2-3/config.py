@@ -35,10 +35,8 @@ class DefaultConfig():
         
         for k, v in kwargs.items():
             
-            if not hasattr(self, k):
-                raise Exception('Unknown attr '+ k +' !')
-            else:
-                setattr(self, k, v)
+            assert hasattr(self, k), 'Unknown attr '+ k +' !'
+            setattr(self, k, v)
                 
         self.print_config()
         

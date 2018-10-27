@@ -29,13 +29,11 @@ class Visualizer():
     
     def plot(self, name, epoch, value):
         
-        if not name in self.names:
-            raise Exception('Unknown name for plotting! Use add_names to add a new name.')
+        assert name in self.names, 'Unknown name for plotting! Use add_names to add a new name.'
             
-        else:
-            opts = {'xlabel':'epoch', 'ylabel':name} 
-            self.vis.line(Y=np.array([value]), X=np.array([epoch]), win=name,
-                          opts=opts, update='append')
+        opts = {'xlabel':'epoch', 'ylabel':name} 
+        self.vis.line(Y=np.array([value]), X=np.array([epoch]), win=name,
+                      opts=opts, update='append')
             
         return
     

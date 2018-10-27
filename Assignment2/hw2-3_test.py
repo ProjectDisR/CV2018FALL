@@ -47,10 +47,8 @@ class DefaultConfig():
         
         for k, v in kwargs.items():
             
-            if not hasattr(self, k):
-                raise Exception('Unknown attr '+ k +' !')
-            else:
-                setattr(self, k, v)
+            assert hasattr(self, k), 'Unknown attr '+ k +' !'
+            setattr(self, k, v)
                 
         self.print_config()
         
@@ -92,7 +90,7 @@ def test(csv, **kwargs):
     test_dataloader = DataLoader(test_dataset, opt.batch_size, shuffle=False)
     
     lenet5 = Lenet5()
-    lenet5.load_state_dict(t.load(os.path.join(opt.ckpts_root)))
+    lenet5.load_state_dict(t.load(opt.ckpts_root))
     lenet5 = lenet5.eval()
     
     label_ls = []
@@ -103,7 +101,7 @@ def test(csv, **kwargs):
         id_ls += img_name
     
     with open(csv, 'w') as outfile:
-        outfile.write('id, label\n')
+        outfile.write('id,label\n')
         for i in range (len(id_ls)):
             outfile.write('{},{}\n'.format(id_ls[i], label_ls[i]))
     
