@@ -36,27 +36,22 @@ def train(**kwargs):
     for epoch in range(opt.n_epoch):
         
         print('epoch{} '.format(epoch), time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-        avgloss = 0       
         
-        for i, (I, labels) in enumerate(train_dataloader):
+        for I, labels in train_dataloader:
             
             loss = criterion(lenet5(I)[0], labels)
             
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-            
-            avgloss += loss.item()
         
-        for i, (I, labels) in enumerate(valid_dataloader):
+        for I, labels in valid_dataloader:
             
             loss = criterion(lenet5(I)[0], labels)
             
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-            
-            avgloss += loss.item()
         
         t.save(lenet5.state_dict(), os.path.join(opt.ckpts_root, 'lenet5_e{}.ckpt'.format(epoch+1)))
         
