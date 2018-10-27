@@ -134,9 +134,9 @@ def FeatureVisualization(ckpt_root):
         _, map1, map2 = lenet5(I)
         map1 = map1.view(map1.size()[0], -1).detach().numpy()
         map2 = map2.view(map2.size()[0], -1).detach().numpy()
-        
-        vis.vis.scatter(TSNE().fit_transform(map1), labels, win='conv1feature', opts={'title': 'conv1 feature'})
-        vis.vis.scatter(TSNE().fit_transform(map2), labels, win='conv2feature', opts={'title': 'conv2 feature'})
+        legend = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+        vis.vis.scatter(TSNE().fit_transform(map1), labels, win='conv1feature', opts={'title': 'conv1 feature', 'legend':legend})
+        vis.vis.scatter(TSNE().fit_transform(map2), labels, win='conv2feature', opts={'title': 'conv2 feature', 'legend':legend})
     
     return
 
