@@ -5,75 +5,103 @@ import cv2
 # u, v are N-by-2 matrices, representing N corresponding points for v = T(u)
 # this function should return a 3-by-3 homography matrix
 def solve_homography(u, v):
-#    N = u.shape[0]
-#    if v.shape[0] is not N:
-#        print('u and v should have the same size')
-#        return None
-#    if N < 4:
-#        print('At least 4 points should be given')
-#    A = np.zeros((2*N, 8))
-#	# if you take solution 2:
-#	# A = np.zeros((2*N, 9))
-#    b = np.zeros((2*N, 1))
-#    H = np.zeros((3, 3))
-#    # TODO: compute H from A and b
-        
-    H, _ = cv2.findHomography(u, v)
+    N = u.shape[0]
+    if v.shape[0] is not N:
+        print('u and v should have the same size')
+        return None
+    if N < 4:
+        print('At least 4 points should be given')
+    A = np.zeros((2*N, 9))
+
+    for i in range(0, len(u)):
+        x = u[i][0]
+        y = u[i][1]
+
+        x_ = v[i][0]
+        y_ = v[i][1]
+
+        A[2*i] = [x, y, 1, 0, 0, 0, -x_*x, -x_*y, -x_]
+        A[2*i + 1] = [0, 0, 0, x, y, 1, -y_*x, -y_*y, -y_]
+
+    U, s, V = np.linalg.svd(A, full_matrices=True)
+    H = V[-1, :].reshape(3, 3)
     
-    return np.array(H)
+    return H
 
 
-# corners are 4-by-2 arrays, representing the four image corner (x, y) pairs
 def transform(img, canvas, corners):
     h, w, ch = img.shape
-    # TODO: some magic
+    canvas = canvas.astype(np.float)
+    
     img_t = np.zeros(canvas.shape)
-    H = solve_homography(getcorners(img), corners)
+
     indices = np.indices((h, w))
     indices = indices.reshape(2, -1)
     indices = np.roll(indices, 1, axis=0)
     ones = np.ones((1, indices.shape[1]))
     indices = np.concatenate((indices, ones), axis=0)
+    
+    H = solve_homography(getcorners(img), corners)
+    
     indices_t = np.matmul(H, indices)
     indices_t[0] = indices_t[0] / indices_t[2]
     indices_t[1] = indices_t[1] / indices_t[2]
+    indices_t[0] = np.clip(indices_t[0], 0, canvas.shape[1]-1)
+    indices_t[1] = np.clip(indices_t[1], 0, canvas.shape[0]-1)
     indices_t = indices_t.astype(np.int)
-    indices_t[0] = np.clip(indices_t[0], 0, canvas.shape[1] - 1)
-    indices_t[1] = np.clip(indices_t[1], 0, canvas.shape[0] - 1)
     indices_t = np.roll(indices_t[:2], 1, axis=0).reshape(2, h, w)
+    
     img_t[indices_t[0], indices_t[1]] = img
-    mask = img_t > 1
+    mask = np.sum(img_t, axis=2)>1
+    mask = np.tile(np.expand_dims(mask, axis=2), (1, 1, 3))
     
     canvas = mask*img_t + (1-mask)*canvas
     
     return canvas
 
 def inversetransform(img, corners, shape):
+    
+    img = img.astype(np.float)
     h = shape[0]
-    w = shape[1]
-    
+    w = shape[1] 
     corners_t = np.array([[0, 0], [w-1, 0], [0, h-1], [w-1, h-1]])
+    
+    indices_t = np.indices((h, w))
+    indices_t = indices_t.reshape(2, -1)
+    indices_t = np.roll(indices_t, 1, axis=0)
+    ones = np.ones((1, indices_t.shape[1]))
+    indices_t = np.concatenate((indices_t, ones), axis=0)
+    
     H_inverse = solve_homography(corners_t, corners)
-    indices = np.indices((h, w))
-    indices = indices.reshape(2, -1)
-    indices = np.roll(indices, 1, axis=0)
-    ones = np.ones((1, indices.shape[1]))
-    indices = np.concatenate((indices, ones), axis=0)
-    indices_t = np.matmul(H_inverse, indices)
-    indices_t[0] = indices_t[0] / indices_t[2]
-    indices_t[1] = indices_t[1] / indices_t[2]
-    indices_t[0] = np.clip(indices_t[0], 0, img.shape[1] - 1)
-    indices_t[1] = np.clip(indices_t[1], 0, img.shape[0] - 1)
-    indices_t = np.roll(indices_t[:2], 1, axis=0).reshape(2, h, w)
     
-    img_t = img.astype(np.int).copy()[np.floor(indices_t[0]).astype(np.int), np.floor(indices_t[1]).astype(np.int)]
-    img_t += img.astype(np.int).copy()[np.floor(indices_t[0]).astype(np.int), np.ceil(indices_t[1]).astype(np.int)]
-    img_t += img.astype(np.int).copy()[np.ceil(indices_t[0]).astype(np.int), np.floor(indices_t[1]).astype(np.int)]
-    img_t += img.astype(np.int).copy()[np.ceil(indices_t[0]).astype(np.int), np.ceil(indices_t[1]).astype(np.int)]
+    indices = np.matmul(H_inverse, indices_t)
+    indices[0] = indices[0] / indices[2]
+    indices[1] = indices[1] / indices[2]
+    indices[0] = np.clip(indices[0], 0, img.shape[1]-1)
+    indices[1] = np.clip(indices[1], 0, img.shape[0]-1)
+    indices = np.roll(indices[:2], 1, axis=0).reshape(2, h, w)
     
-    return (img_t/4).astype(np.uint8)
+    
+    ul = (np.ceil(indices[0])-indices[0])*(np.ceil(indices[1])-indices[1])
+    ur = (np.ceil(indices[0])-indices[0])*(indices[1]-np.floor(indices[1]))
+    bl = (indices[0]-np.floor(indices[0]))*(np.ceil(indices[1])-indices[1])
+    br = (indices[0]-np.floor(indices[0]))*(indices[1]-np.floor(indices[1]))
+    
+    ul = np.tile(np.expand_dims(ul, axis=2), (1, 1, 3))
+    ur = np.tile(np.expand_dims(ur, axis=2), (1, 1, 3))
+    bl = np.tile(np.expand_dims(bl, axis=2), (1, 1, 3))
+    br = np.tile(np.expand_dims(br, axis=2), (1, 1, 3))
+    
+    
+    img_ul = img[np.floor(indices[0]).astype(np.int), np.floor(indices[1]).astype(np.int)]
+    img_ur = img[np.floor(indices[0]).astype(np.int), np.ceil(indices[1]).astype(np.int)]
+    img_bl = img[np.ceil(indices[0]).astype(np.int), np.floor(indices[1]).astype(np.int)]
+    img_br = img[np.ceil(indices[0]).astype(np.int), np.ceil(indices[1]).astype(np.int)]
+    
+    return img_ul*ul+img_ur*ur+img_bl*bl+img_br*br
 
 def getcorners(img):
+    
     m = img.shape[0]
     n = img.shape[1]
     
@@ -110,8 +138,8 @@ cv2.imwrite('canvas_t.jpg', canvas_t)
     # Part 2
 img = cv2.imread('./input/screen.jpg')
 
-cornerss = np.array([[1038, 368], [1100, 395], [982, 553], [1036, 600]])
-qrcode = inversetransform(img, cornerss, (150, 150))
+corners = np.array([[1038, 368], [1100, 395], [982, 553], [1036, 600]])
+qrcode = inversetransform(img, corners, (150, 150))
 cv2.imwrite('qrcode.jpg', qrcode)
 
 #    # Part 3
