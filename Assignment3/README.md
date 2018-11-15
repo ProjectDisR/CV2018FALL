@@ -11,9 +11,11 @@ Warp images onto selected surfaces
 ## Unwarp the Screen
 
 left front view | unwarped QR code
+--- | ---
 ![screen](./input/screen.jpg) | ![qrcode](part2.png)
 
 ## Unwarp the 3D Illusion
 
-front view | unwarped top view | real top view 
+front view | unwarped top view | real top view
+--- | --- | ---
 ![crosswalk](./input/crosswalk_front.jpg) | ![unwarp_topview](part3.png) | ![topview](gt.png)
