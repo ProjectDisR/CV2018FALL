@@ -2,6 +2,13 @@ import numpy as np
 import cv2
 
 
+def getcorners(img):
+    
+    m = img.shape[0]
+    n = img.shape[1]
+    
+    return np.array([[0, 0], [n-1, 0], [0, m-1], [n-1, m-1]])
+
 # u, v are N-by-2 matrices, representing N corresponding points for v = T(u)
 # this function should return a 3-by-3 homography matrix
 def solve_homography(u, v):
@@ -77,8 +84,6 @@ def inversetransform(img, corners, shape):
     indices = np.matmul(H_inverse, indices_t)
     indices[0] = indices[0] / indices[2]
     indices[1] = indices[1] / indices[2]
-    indices[0] = np.clip(indices[0], 0, img.shape[1]-1)
-    indices[1] = np.clip(indices[1], 0, img.shape[0]-1)
     indices = np.roll(indices[:2], 1, axis=0).reshape(2, h, w)
     
     
@@ -92,6 +97,9 @@ def inversetransform(img, corners, shape):
     bl = np.tile(np.expand_dims(bl, axis=2), (1, 1, 3))
     br = np.tile(np.expand_dims(br, axis=2), (1, 1, 3))
     
+    indices[0] = np.clip(indices[0], 0, img.shape[0]-1)
+    indices[1] = np.clip(indices[1], 0, img.shape[1]-1)
+    
     
     img_ul = img[np.floor(indices[0]).astype(np.int), np.floor(indices[1]).astype(np.int)]
     img_ur = img[np.floor(indices[0]).astype(np.int), np.ceil(indices[1]).astype(np.int)]
@@ -100,13 +108,46 @@ def inversetransform(img, corners, shape):
     
     return img_ul*ul+img_ur*ur+img_bl*bl+img_br*br
 
-def getcorners(img):
-    
-    m = img.shape[0]
-    n = img.shape[1]
-    
-    return np.array([[0, 0], [n-1, 0], [0, m-1], [n-1, m-1]])
 
+def viewtransform(img, corners, corners_t, shape):
+    img = img.astype(np.float)
+    h = shape[0]
+    w = shape[1] 
+    
+    indices_t = np.indices((h, w))
+    indices_t = indices_t.reshape(2, -1)
+    indices_t = np.roll(indices_t, 1, axis=0)
+    ones = np.ones((1, indices_t.shape[1]))
+    indices_t = np.concatenate((indices_t, ones), axis=0)
+    
+    H_inverse = solve_homography(corners_t, corners)
+    
+    indices = np.matmul(H_inverse, indices_t)
+    indices[0] = indices[0] / indices[2]
+    indices[1] = indices[1] / indices[2]
+    indices = np.roll(indices[:2], 1, axis=0).reshape(2, h, w)
+    
+    
+    ul = (np.ceil(indices[0])-indices[0])*(np.ceil(indices[1])-indices[1])
+    ur = (np.ceil(indices[0])-indices[0])*(indices[1]-np.floor(indices[1]))
+    bl = (indices[0]-np.floor(indices[0]))*(np.ceil(indices[1])-indices[1])
+    br = (indices[0]-np.floor(indices[0]))*(indices[1]-np.floor(indices[1]))
+    
+    ul = np.tile(np.expand_dims(ul, axis=2), (1, 1, 3))
+    ur = np.tile(np.expand_dims(ur, axis=2), (1, 1, 3))
+    bl = np.tile(np.expand_dims(bl, axis=2), (1, 1, 3))
+    br = np.tile(np.expand_dims(br, axis=2), (1, 1, 3))
+    
+    indices[0] = np.clip(indices[0], 0, img.shape[0]-1)
+    indices[1] = np.clip(indices[1], 0, img.shape[1]-1)
+    
+    
+    img_ul = img[np.floor(indices[0]).astype(np.int), np.floor(indices[1]).astype(np.int)]
+    img_ur = img[np.floor(indices[0]).astype(np.int), np.ceil(indices[1]).astype(np.int)]
+    img_bl = img[np.ceil(indices[0]).astype(np.int), np.floor(indices[1]).astype(np.int)]
+    img_br = img[np.ceil(indices[0]).astype(np.int), np.ceil(indices[1]).astype(np.int)]
+
+    return img_ul*ul+img_ur*ur+img_bl*bl+img_br*br
 
 # Part 1
 canvas = cv2.imread('./input/times_square.jpg')
@@ -140,9 +181,15 @@ img = cv2.imread('./input/screen.jpg')
 
 corners = np.array([[1038, 368], [1100, 395], [982, 553], [1036, 600]])
 qrcode = inversetransform(img, corners, (150, 150))
+#qrcode = qrcode.astype(np.uint8)
+#qrcode = cv2.cvtColor(qrcode, cv2.COLOR_BGR2GRAY)
 cv2.imwrite('qrcode.jpg', qrcode)
 
-#    # Part 3
-#    img_front = cv2.imread('./input/crosswalk_front.jpg')
-#    # TODO: some magic
-#    # cv2.imwrite('part3.png', output3)
+# Part 3 47 173 73 173
+img_front = cv2.imread('./input/crosswalk_front.jpg')
+corners = np.array([[136, 163], [585, 157], [62, 238], [660, 230]])
+#corners_t = np.array([[448, 398], [498, 398], [448, 478], [496, 480]])
+corners_t = np.array([[148, 146], [802, 146], [146, 398], [806, 400]])
+output3 = viewtransform(img_front, corners, corners_t, (669, 944))
+# TODO: some magic
+cv2.imwrite('part3.png', output3)
