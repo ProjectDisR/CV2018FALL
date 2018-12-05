@@ -97,6 +97,8 @@ def computeDisp(Il, Ir, max_disp):
     
     Il = Il.astype('float32')
     Ir = Ir.astype('float32')
+    Il = Il / 255
+    Ir = Ir / 255
     
     Il_dx = Il.copy()
     Il_dx[:, 1:] =  Il_dx[:, 1:] - Il[:, :w-1]
@@ -109,7 +111,7 @@ def computeDisp(Il, Ir, max_disp):
     tic = time.time()
     
     # TODO: Compute matching cost from Il and Ir
-    for d in range(max_disp):
+    for d in range(1, max_disp+1):
         cost1 = Il.copy()
         Ir_ = Ir[:, :w-d, :]
         cost1[:, d:, :] = cost1[:, d:, :] - Ir_
@@ -121,7 +123,7 @@ def computeDisp(Il, Ir, max_disp):
         cost2= cost2**2
         cost2 = np.sum(cost2, axis=2)
         
-        cost_ls.append(0.1*cost1 + 0.9*cost2)
+        cost_ls.append(0.1*cost1 + 0.*cost2)
         
     costvolume = np.stack(cost_ls, axis=2)
         
@@ -132,7 +134,7 @@ def computeDisp(Il, Ir, max_disp):
     tic = time.time()
     
     # TODO: Refine cost by aggregate nearby costs
-    costvolume_filtered = JBF(costvolume, Il, 19, 1, 3)
+    costvolume_filtered = JBF(costvolume, Il, 19, 9, 0.1)
     
     toc = time.time()
     print('* Elapsed time (cost aggregation): %f sec.' % (toc - tic))
@@ -142,6 +144,7 @@ def computeDisp(Il, Ir, max_disp):
     
     # TODO: Find optimal disparity based on estimated cost. Usually winner-take-all.
     labels = np.argmin(costvolume_filtered, axis=2)
+    labels = labels + 1
      
     toc = time.time()
     print('* Elapsed time (disparity optimization): %f sec.' % (toc - tic))
