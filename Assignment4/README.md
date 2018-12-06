@@ -13,7 +13,7 @@ Left View | Right View | Disparity | Ground Truth
 ![teddy_l](testdata/teddy/im2.png) | ![teddy_r](testdata/teddy/im6.png) | ![teddy_d](teddy.png) Bad Pixel Ratio: 16.69%| ![teddy_gt](testdata/teddy/disp2.png)
 ![cones_l](testdata/cones/im2.png) | ![cones_r](testdata/cones/im6.png) | ![cones_d](cones.png) Bad Pixel Ratio: 14.95%| ![cones_gt](testdata/cones/disp2.png)
 
-Average: 11.07%
+Average: **11.07%**
 
 ## Requirements
 * numpy
