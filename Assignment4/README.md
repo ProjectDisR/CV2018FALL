@@ -11,7 +11,7 @@ Left View | Right View | Disparity
 ![tsukuba_l](testdata/tsukuba/img3.png) | ![tsukuba_r](testdata/tsukuba/img4.png) | ![tsukuba_d](tsukuba.png)
 ![venus_l](testdata/venus/img2.png) | ![venus_r](testdata/venus/img6.png) | ![venus_d](venus.png)
 ![teddy_l](testdata/teddy/img2.png) | ![teddy_r](testdata/teddy/img6.png) | ![teddy_d](teddy.png)
-![cone_l](testdata/cone/img2.png) | ![cone_r](testdata/cone/img6.png) | ![cone_d](cone.png)
+![cones_l](testdata/cones/img2.png) | ![cones_r](testdata/cones/img6.png) | ![cones_d](cone.spng)
 
 ## Requirements
 * numpy
