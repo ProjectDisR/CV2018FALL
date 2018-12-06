@@ -6,7 +6,7 @@ Stereo Matching [[slides](http://media.ee.ntu.edu.tw/courses/cv/18F/hw/cv2018_hw
 
 ## Results
 
-Left View | Right View | Disparity Eval | Ground Truth
+Left View | Right View | Disparity | Ground Truth
 --- | --- | --- | --- 
 ![tsukuba_l](testdata/tsukuba/im3.png) | ![tsukuba_r](testdata/tsukuba/im4.png) | ![tsukuba_d](tsukuba.png) | ![tsukuba_gt](testdata/tsukuba/disp3.pgm)
 ![venus_l](testdata/venus/im2.png) | ![venus_r](testdata/venus/im6.png) | ![venus_d](venus.png) | ![venus_gt](testdata/venus/disp2.pgm)
