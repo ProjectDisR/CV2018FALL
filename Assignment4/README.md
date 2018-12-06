@@ -8,14 +8,14 @@ Stereo Matching [[slides](http://media.ee.ntu.edu.tw/courses/cv/18F/hw/cv2018_hw
 
 Left View | Right View | Disparity | Ground Truth
 --- | --- | --- | --- 
-![tsukuba_l](testdata/tsukuba/im3.png) | ![tsukuba_r](testdata/tsukuba/im4.png) | ![tsukuba_d](tsukuba.png) | ![tsukuba_gt](testdata/tsukuba/disp3.png)
-![venus_l](testdata/venus/im2.png) | ![venus_r](testdata/venus/im6.png) | ![venus_d](venus.png) | ![venus_gt](testdata/venus/disp2.png)
-![teddy_l](testdata/teddy/im2.png) | ![teddy_r](testdata/teddy/im6.png) | ![teddy_d](teddy.png) | ![teddy_gt](testdata/teddy/disp2.png)
-![cones_l](testdata/cones/im2.png) | ![cones_r](testdata/cones/im6.png) | ![cones_d](cones.png) | ![cones_gt](testdata/cones/disp2.png)
+![tsukuba_l](testdata/tsukuba/im3.png) | ![tsukuba_r](testdata/tsukuba/im4.png) | ![tsukuba_d](tsukuba.png) Bad Pixel Ratio: 7.68%| ![tsukuba_gt](testdata/tsukuba/disp3.png)
+![venus_l](testdata/venus/im2.png) | ![venus_r](testdata/venus/im6.png) | ![venus_d](venus.png) Bad Pixel Ratio: 4.94%| ![venus_gt](testdata/venus/disp2.png)
+![teddy_l](testdata/teddy/im2.png) | ![teddy_r](testdata/teddy/im6.png) | ![teddy_d](teddy.png) Bad Pixel Ratio: 16.69%| ![teddy_gt](testdata/teddy/disp2.png)
+![cones_l](testdata/cones/im2.png) | ![cones_r](testdata/cones/im6.png) | ![cones_d](cones.png) Bad Pixel Ratio: 14.95%| ![cones_gt](testdata/cones/disp2.png)
 
 ## Requirements
 * numpy
-* scikit-image
+* opencv
 
 ## References
 [1] C. Rhemann, A. Hosni, M. Bleyer, C. Rother, and M. Gelautz, “Fast cost-volume filtering for visual correspondence and beyond,” in CVPR, 2011.
