@@ -8,10 +8,10 @@ Stereo Matching [[slides](http://media.ee.ntu.edu.tw/courses/cv/18F/hw/cv2018_hw
 
 Left View | Right View | Disparity
 --- | --- | ---
-![tsukuba_l](testdata/tsukuba/img3.png) | ![tsukuba_r](testdata/tsukuba/img4.png) | ![tsukuba_d](tsukuba.png)
-![venus_l](testdata/venus/img2.png) | ![venus_r](testdata/venus/img6.png) | ![venus_d](venus.png)
-![teddy_l](testdata/teddy/img2.png) | ![teddy_r](testdata/teddy/img6.png) | ![teddy_d](teddy.png)
-![cones_l](testdata/cones/img2.png) | ![cones_r](testdata/cones/img6.png) | ![cones_d](cone.spng)
+![tsukuba_l](testdata/tsukuba/im3.png) | ![tsukuba_r](testdata/tsukuba/im4.png) | ![tsukuba_d](tsukuba.png)
+![venus_l](testdata/venus/im2.png) | ![venus_r](testdata/venus/im6.png) | ![venus_d](venus.png)
+![teddy_l](testdata/teddy/im2.png) | ![teddy_r](testdata/teddy/im6.png) | ![teddy_d](teddy.png)
+![cones_l](testdata/cones/im2.png) | ![cones_r](testdata/cones/im6.png) | ![cones_d](cone.spng)
 
 ## Requirements
 * numpy
