@@ -144,14 +144,12 @@ def computeDisp(Il, Ir, max_disp):
     tic = time.time()
     
     # TODO: Refine cost by aggregate nearby costs
-    costvolume_filtered_l = JBF(costvolume_l, Il, 19, 9, 0.2)
-    costvolume_filtered_r = JBF(costvolume_r, Ir, 19, 9, 0.2)
+    
+    costvolume_filtered_l = JBF(costvolume_l, Il, 19, 17, 0.12)
+    costvolume_filtered_r = JBF(costvolume_r, Ir, 19, 17, 0.12)
     
     toc = time.time()
     print('* Elapsed time (cost aggregation): %f sec.' % (toc - tic))
-
-
-
 
 
 
@@ -177,11 +175,9 @@ def computeDisp(Il, Ir, max_disp):
 
 
 
-
-
-
     # >>> Disparity refinement
     tic = time.time()
+    
     # TODO: Do whatever to enhance the disparity map
     # ex: Left-right consistency check + hole filling + weighted median filtering
     
@@ -201,28 +197,12 @@ def computeDisp(Il, Ir, max_disp):
             if occluded[i, j]:
                 labels_l[i, j] = labels_l[i, not_occluded[np.argmin(np.abs(not_occluded-j))]]
     
-    
-#    occluded = np.full((h, w), True)
-#    for i in range(h):
-#        for j in range(w):
-#            if int(j+labels_r[i, j]) >= w:
-#                continue
-#            if labels_r[i, j] == labels_l[i][int(j+labels_r[i, j])]:
-#                occluded[i, j] = False
-#    
-#    for i in range(h):
-#        not_occluded = np.where(occluded[i] == False)[0]
-#        for j in range(w):
-#            if occluded[i, j]:
-#                labels_r[i, j] = labels_r[i, not_occluded[np.argmin(np.abs(not_occluded-j))]]
-#            
-#    labels = np.stack([labels_l, labels_r], axis=2)
-    
     toc = time.time()
     print('* Elapsed time (disparity refinement): %f sec.' % (toc - tic))
     
+    
     labels_l = labels_l.astype('uint8')
-    return cv2.medianBlur(labels_l, 3)
+    return cv2.medianBlur(labels_l, 7)
 
 
 def main():
