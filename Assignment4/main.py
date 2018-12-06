@@ -100,63 +100,129 @@ def computeDisp(Il, Ir, max_disp):
     Il = Il / 255
     Ir = Ir / 255
     
-    Il_dx = Il.copy()
-    Il_dx[:, 1:] =  Il_dx[:, 1:] - Il[:, :w-1]
-    Ir_dx = Ir.copy()
-    Ir_dx[:, 1:] =  Ir_dx[:, 1:] - Ir[:, :w-1]
-    
-    cost_ls = []
     
     # >>> Cost computation
     tic = time.time()
     
     # TODO: Compute matching cost from Il and Ir
+    
+    cost_ls = []
+    
     for d in range(1, max_disp+1):
         cost1 = Il.copy()
         Ir_ = Ir[:, :w-d, :]
         cost1[:, d:, :] = cost1[:, d:, :] - Ir_
         cost1 = cost1**2
         cost1 = np.sum(cost1, axis=2)
+
+        cost_ls.append(cost1)
         
-        cost2 = Il_dx.copy()
-        cost2[:, d:, :] = cost2[:, d:, :] - Ir_dx[:, :w-d, :]
-        cost2= cost2**2
-        cost2 = np.sum(cost2, axis=2)
+    costvolume_l = np.stack(cost_ls, axis=2)
+    
+    cost_ls = []
+    
+    for d in range(1, max_disp+1):
+        cost1 = Ir.copy()
+        Il_ = Il[:, d:, :]
+        cost1[:, :w-d, :] = cost1[:, :w-d, :] - Il_
+        cost1 = cost1**2
+        cost1 = np.sum(cost1, axis=2)
         
-        cost_ls.append(0.1*cost1 + 0.*cost2)
+        cost_ls.append(cost1)
         
-    costvolume = np.stack(cost_ls, axis=2)
+    costvolume_r = np.stack(cost_ls, axis=2)
         
     toc = time.time()
     print('* Elapsed time (cost computation): %f sec.' % (toc - tic))
+
+
+
+
+
 
     # >>> Cost aggregation
     tic = time.time()
     
     # TODO: Refine cost by aggregate nearby costs
-    costvolume_filtered = JBF(costvolume, Il, 19, 9, 0.1)
+    costvolume_filtered_l = JBF(costvolume_l, Il, 19, 9, 0.2)
+    costvolume_filtered_r = JBF(costvolume_r, Ir, 19, 9, 0.2)
     
     toc = time.time()
     print('* Elapsed time (cost aggregation): %f sec.' % (toc - tic))
+
+
+
+
+
+
+
+
 
     # >>> Disparity optimization
     tic = time.time()
     
     # TODO: Find optimal disparity based on estimated cost. Usually winner-take-all.
-    labels = np.argmin(costvolume_filtered, axis=2)
-    labels = labels + 1
+    
+    labels_l = np.argmin(costvolume_filtered_l, axis=2)
+    labels_l = labels_l + 1
+    labels_r = np.argmin(costvolume_filtered_r, axis=2)
+    labels_r = labels_r + 1
      
     toc = time.time()
     print('* Elapsed time (disparity optimization): %f sec.' % (toc - tic))
+
+
+
+
+
+
+
+
+
 
     # >>> Disparity refinement
     tic = time.time()
     # TODO: Do whatever to enhance the disparity map
     # ex: Left-right consistency check + hole filling + weighted median filtering
+    
+    occluded = np.full((h, w), True)
+    for i in range(h):
+        for j in range(w):
+            
+            if int(j-labels_l[i, j]) < 0:
+                continue
+            
+            if labels_l[i, j] == labels_r[i][int(j-labels_l[i, j])]:
+                occluded[i, j] = False
+    
+    for i in range(h):
+        not_occluded = np.where(occluded[i] == False)[0]
+        for j in range(w):
+            if occluded[i, j]:
+                labels_l[i, j] = labels_l[i, not_occluded[np.argmin(np.abs(not_occluded-j))]]
+    
+    
+#    occluded = np.full((h, w), True)
+#    for i in range(h):
+#        for j in range(w):
+#            if int(j+labels_r[i, j]) >= w:
+#                continue
+#            if labels_r[i, j] == labels_l[i][int(j+labels_r[i, j])]:
+#                occluded[i, j] = False
+#    
+#    for i in range(h):
+#        not_occluded = np.where(occluded[i] == False)[0]
+#        for j in range(w):
+#            if occluded[i, j]:
+#                labels_r[i, j] = labels_r[i, not_occluded[np.argmin(np.abs(not_occluded-j))]]
+#            
+#    labels = np.stack([labels_l, labels_r], axis=2)
+    
     toc = time.time()
     print('* Elapsed time (disparity refinement): %f sec.' % (toc - tic))
-
-    return labels
+    
+    labels_l = labels_l.astype('uint8')
+    return cv2.medianBlur(labels_l, 3)
 
 
 def main():
