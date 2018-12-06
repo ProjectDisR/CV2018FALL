@@ -5,3 +5,5 @@ Instructors: [Prof. Shao-Yi Chien](http://media.ee.ntu.edu.tw/member/#nevigator)
 ## Assignment 1: [Advanced Color-to-Gray Conversion](./Assignment1)
 ## Assignment 2: [ML & DL Basics](./Assignment2)
 ## Assignment 3: [Projective Geometry](./Assignment3)
+## Assignment 4: [Stereo Matching](./Assignment4)
+
