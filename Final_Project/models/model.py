@@ -7,7 +7,7 @@ class Model(nn.Module):
         super(Model, self).__init__()
         
         self.cnn = nn.Sequential(
-            nn.Conv2d(1, 32, kernel_size=3),
+            nn.Conv2d(3, 32, kernel_size=3),
             nn.BatchNorm2d(32),
             nn.ReLU(inplace=True),
             nn.Conv2d(32, 32, kernel_size=3),
