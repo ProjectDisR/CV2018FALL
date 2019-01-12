@@ -47,7 +47,7 @@ class KITTI2012(Dataset):
         ## LEFT ##
         ##########
         # read left image
-        path = path.replace('disp_noc', 'colored_0')
+        path = path.replace('disp_noc', 'colored_1')
         left_img = cv2.imread(path)
         # create left patch (padded if necessary)
         left_padded = np.zeros((self.hw*2+1, self.hw*2+1, 3), dtype=np.uint8)
@@ -61,7 +61,7 @@ class KITTI2012(Dataset):
         ## RIGHT ##
         ###########
         # read right image
-        path = path.replace('colored_0', 'colored_1')
+        path = path.replace('colored_1', 'colored_0')
         right_img = cv2.imread(path)
         # create right patch (padded if necessary)
         right_padded = np.zeros((self.hw*2+1, self.max_disp+self.hw*2+1, 3),
