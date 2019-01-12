@@ -19,7 +19,7 @@ class DefaultConfig():
         
         self.n_epoch = 20000
         self.batch_size = 128
-        self.lr = 0.001
+        self.lr = 0.01
         self.exp_decay_at_epoch = 100
         
         self.ckpts = 'ckpts/'
