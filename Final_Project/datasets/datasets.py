@@ -50,13 +50,10 @@ class KITTI2012(Dataset):
         path = path.replace('disp_noc', 'colored_0')
         left_img = cv2.imread(path, 0)
         # create left patch (padded if necessary)
-        left_padded = np.zeros((1, self.hw*2+1, self.hw*2+1), dtype=np.float32)
+        left_padded = np.zeros((1, self.hw*2+1, self.hw*2+1), dtype=np.uint8)
         # extract left patch (subtrack disparity from `p_x' for left coords)
         left_patch = left_img[p_y-self.hw: p_y+self.hw+1, 
                 p_x-d-self.hw: p_x-d+self.hw+1]
-        # normalize [0-1]
-        left_patch = left_patch / 255
-        # store in padded array
         left_padded[:, :left_patch.shape[0], :left_patch.shape[1]] = left_patch
         left_padded = self.transforms(left_padded)
 
@@ -68,12 +65,10 @@ class KITTI2012(Dataset):
         right_img = cv2.imread(path, 0)
         # create right patch (padded if necessary)
         right_padded = np.zeros((1, self.hw*2+1, self.max_disp+self.hw*2+1),
-                dtype=np.float32)
+                dtype=np.uint8)
         # extract right patch
         right_patch = right_img[p_y-self.hw: p_y+self.hw+1,
                 p_x-self.hw: p_x+self.hw+self.max_disp+1]
-        # normalize [0-1]
-        right_patch = right_patch / 255
         # store in padded array
         right_padded[:, :right_patch.shape[0], 
                 :right_patch.shape[1]] = right_patch
