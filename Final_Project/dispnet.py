@@ -97,7 +97,7 @@ def train(**kwargs):
             output = model(left, right)
             d_ = t.argmax(output, dim=1)
             
-            accuracy_meter.update((d_ == d).item().sum()/d.shape[0], d.shape[0])
+            accuracy_meter.update((d_ == d).sum().item()/d.shape[0], d.shape[0])
         
         vis.plot('loss', epoch, loss_meter.avg)
         vis.plot('accuracy', epoch, accuracy_meter.avg)
