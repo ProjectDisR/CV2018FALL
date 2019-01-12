@@ -4,4 +4,3 @@ Created on Mon Sep  3 21:47:48 2018
 
 @author: user
 """
-from .my_model import My_Model
