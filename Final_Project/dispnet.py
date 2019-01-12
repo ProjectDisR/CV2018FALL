@@ -53,7 +53,7 @@ def train(**kwargs):
     optimizer = t.optim.Adagrad(model.parameters(), opt.lr)
     
     vis = Visualizer(opt.env, opt.port)
-    vis.add_names('loss', 'accuracy')
+    vis.add_wins('loss', 'accuracy')
     
     if not os.path.exists(opt.ckpts):
         os.makedirs(opt.ckpts)
