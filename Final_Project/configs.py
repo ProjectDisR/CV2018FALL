@@ -1,0 +1,50 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Sep  3 21:49:28 2018
+
+@author: user
+"""
+
+class DefaultConfig():
+    
+    def __init__(self):
+        
+        self.env = 'CVFALL2018'
+        self.port = 8888
+        
+        self.dataset = 'kitti2012/training/'
+        self.max_disp = 128
+        self.receptive_size = 9
+        self.num_workers = 0
+        
+        self.n_epoch = 200
+        self.batch_size = 128
+        self.lr = 1e-2
+        self.exp_decay_at_epoch = 100
+        
+        self.ckpts = 'ckpts/'
+        
+        return
+    
+    def print_config(self):
+        
+        print('\n')
+        
+        import inspect
+        
+        for k in dir(self):   
+            if not k.startswith('__') and not inspect.ismethod(getattr(self, k)):
+                print('   ', k, ':', getattr(self, k))
+                
+        return
+    
+    def parse(self, kwargs):
+        
+        for k, v in kwargs.items():
+            assert hasattr(self, k), 'Unknown attr '+ k +' !'
+            
+            setattr(self, k, v)
+                
+        self.print_config()
+        
+        return
