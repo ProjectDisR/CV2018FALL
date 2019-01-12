@@ -82,7 +82,7 @@ def train(**kwargs):
             loss.backward()
             optimizer.step()
             
-            loss_meter.update(loss.item().cpu(), d.shape[0])
+            loss_meter.update(loss.item(), d.shape[0])
             
         t.save(model.state_dict(), os.path.join(opt.ckpts, '{}.ckpt'.format(epoch)))
         
