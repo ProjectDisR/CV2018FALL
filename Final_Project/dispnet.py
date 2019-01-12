@@ -69,7 +69,6 @@ def train(**kwargs):
         model = model.train()
        
         for i, (left, right, d) in enumerate(dataloaders['train']):
-            print(i)
             
             left = left.cuda()
             right = right.cuda()
@@ -101,7 +100,7 @@ def train(**kwargs):
         
         vis.plot('loss', epoch, loss_meter.avg)
         vis.plot('accuracy', epoch, accuracy_meter.avg)
-        vis.log('epoch:{}, loss:{}, accuracy'.format(epoch, loss_meter.avg, accuracy_meter.avg))
+        vis.log('epoch:{}, loss:{}, accuracy:{}'.format(epoch, loss_meter.avg, accuracy_meter.avg))
         
     return
 

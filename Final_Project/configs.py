@@ -17,9 +17,9 @@ class DefaultConfig():
         self.receptive_size = 9
         self.num_workers = 0
         
-        self.n_epoch = 200
-        self.batch_size = 128
-        self.lr = 1e-2
+        self.n_epoch = 20000
+        self.batch_size = 64
+        self.lr = 0.0001
         self.exp_decay_at_epoch = 100
         
         self.ckpts = 'ckpts/'
