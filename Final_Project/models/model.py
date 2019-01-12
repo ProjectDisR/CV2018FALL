@@ -43,5 +43,5 @@ if __name__ == '__main__':
     
     model = Model()
 
-    out = model.forward(left, right)
+    out = model(left, right)
     print('out:', out.shape)
