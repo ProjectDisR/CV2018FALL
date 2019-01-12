@@ -48,7 +48,7 @@ class KITTI2012(Dataset):
         ##########
         # read left image
         path = path.replace('disp_noc', 'colored_0')
-        left_img = cv2.imread(path, 0)
+        left_img = cv2.imread(path)
         # create left patch (padded if necessary)
         left_padded = np.zeros((self.hw*2+1, self.hw*2+1, 3), dtype=np.uint8)
         # extract left patch (subtrack disparity from `p_x' for left coords)
@@ -62,7 +62,7 @@ class KITTI2012(Dataset):
         ###########
         # read right image
         path = path.replace('colored_0', 'colored_1')
-        right_img = cv2.imread(path, 0)
+        right_img = cv2.imread(path)
         # create right patch (padded if necessary)
         right_padded = np.zeros((self.hw*2+1, self.max_disp+self.hw*2+1, 3),
                 dtype=np.uint8)
