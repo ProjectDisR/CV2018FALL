@@ -38,8 +38,8 @@ class Model(nn.Module):
 
 if __name__ == '__main__':
     
-    left = t.randn((2, 1, 9, 9))
-    right = t.randn((2, 1, 9, 136))
+    left = t.randn((2, 3, 9, 9))
+    right = t.randn((2, 3, 9, 136))
     
     model = Model()
 
