@@ -72,12 +72,10 @@ def train(**kwargs):
             right = right.cuda()
             d = d.cuda()
             
-            soft_label = t.zeros([1, opt.max_disp])
+            soft_label = t.zeros([1, opt.max_disp+1])
             soft_label[0, 0:4] = t.tensor([0.5, 0.3, 0.15, 0.05])
             soft_label = soft_label.repeat(d.shape[0], 1)
             output = model(left, right, train=True)
-            print(output.shape)
-            print(soft_label.shape)
             loss = -(output*soft_label).mean()
 
             optimizer.zero_grad()
