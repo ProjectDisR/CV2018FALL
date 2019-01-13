@@ -50,7 +50,7 @@ def train(**kwargs):
    
     criterion = nn.CrossEntropyLoss()
     
-    optimizer = t.optim.Adam(model.parameters(), opt.lr, weight_decay=5e-4)
+    optimizer = t.optim.Adagrad(model.parameters(), opt.lr)
     
     vis = Visualizer(opt.env, opt.port)
     vis.add_wins('loss', 'accuracy')
