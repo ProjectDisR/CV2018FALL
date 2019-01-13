@@ -23,18 +23,6 @@ class Model(nn.Module):
             nn.Conv2d(64, 64, kernel_size=3),
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
-            nn.Conv2d(64, 64, kernel_size=3),
-            nn.BatchNorm2d(64),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(64, 64, kernel_size=3),
-            nn.BatchNorm2d(64),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(64, 64, kernel_size=3),
-            nn.BatchNorm2d(64),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(64, 64, kernel_size=3),
-            nn.BatchNorm2d(64),
-            nn.ReLU(inplace=True),
             nn.Conv2d(64, 64, kernel_size=3)
             )
         
@@ -62,8 +50,8 @@ class Model(nn.Module):
 
 if __name__ == '__main__':
     
-    left = t.randn((2, 3, 19, 19))
-    right = t.randn((2, 3, 19, 147))
+    left = t.randn((2, 3, 11, 11))
+    right = t.randn((2, 3, 11, 139))
     
     model = Model()
 
