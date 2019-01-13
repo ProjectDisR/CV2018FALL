@@ -98,6 +98,7 @@ def train(**kwargs):
             
             output = model(left, right, train=True)
             d_ = t.argmax(output, dim=1)
+            print(d_)
             
             accuracy_meter.update((d_ == d).sum().item()/d.shape[0], d.shape[0])
         
