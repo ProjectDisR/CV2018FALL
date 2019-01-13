@@ -54,8 +54,8 @@ class KITTI2012(Dataset):
         # extract left patch (subtrack disparity from `p_x' for left coords)
         left_patch = left_img[p_y-self.hw: p_y+self.hw+1, 
                 p_x-d-self.hw: p_x-d+self.hw+1]
+        print(p_x-d-self.hw)
         left_padded[:left_patch.shape[0], :left_patch.shape[1], :] = left_patch
-        print(left_padded[:,:,0])
         left_padded = self.transforms(left_padded)
 
         ###########
