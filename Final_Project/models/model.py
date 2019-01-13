@@ -20,6 +20,9 @@ class Model(nn.Module):
             nn.Conv2d(32, 64, kernel_size=3),
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
+            nn.Conv2d(64, 64, kernel_size=3, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
             nn.Conv2d(64, 64, kernel_size=3)
             )
         

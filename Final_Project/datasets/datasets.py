@@ -86,7 +86,7 @@ def get_loaders(data_path, receptive_size, cardinality, batch_size,
     # create random sampler
     indices = np.arange(len(dataset))
     np.random.shuffle(indices)
-    train, valid = indices, indices[160:]
+    train, valid = indices, indices
     train_sampler = SubsetRandomSampler(train)
     valid_sampler = SubsetRandomSampler(valid)
     # create dataloaders
