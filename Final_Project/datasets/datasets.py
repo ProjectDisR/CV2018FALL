@@ -55,6 +55,7 @@ class KITTI2012(Dataset):
         left_patch = left_img[p_y-self.hw: p_y+self.hw+1, 
                 p_x-d-self.hw: p_x-d+self.hw+1]
         left_padded[:left_patch.shape[0], :left_patch.shape[1], :] = left_patch
+        print(left_padded)
         left_padded = self.transforms(left_padded)
 
         ###########
@@ -75,7 +76,6 @@ class KITTI2012(Dataset):
                      
         right_padded = self.transforms(right_padded)
         
-        print(left_padded[:,:,0])
         return left_padded, right_padded, int(d)
 
 def get_loaders(data_path, receptive_size, cardinality, batch_size, 
