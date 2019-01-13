@@ -55,17 +55,17 @@ if __name__ == '__main__':
     
     model = Model()
 
-    out = model(left, right)[2]
+    out = model(left, right, train=True)
     print('out:', out.shape)
     
-    model = Model2()
-    right = cv2.imread('data/Synthetic/TL0.png')
-    left = cv2.imread('data/Synthetic/TR0.png')
-    transforms = tv.transforms.Compose([
-            tv.transforms.ToPILImage(),
-            tv.transforms.ToTensor(),
-            tv.transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-                ])
-    
-    left, right = model(transforms(left).unsqueeze(0), transforms(right).unsqueeze(0))
-    
+#    model = Model2()
+#    right = cv2.imread('data/Synthetic/TL0.png')
+#    left = cv2.imread('data/Synthetic/TR0.png')
+#    transforms = tv.transforms.Compose([
+#            tv.transforms.ToPILImage(),
+#            tv.transforms.ToTensor(),
+#            tv.transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+#                ])
+#    
+#    left, right = model(transforms(left).unsqueeze(0), transforms(right).unsqueeze(0))
+#    
