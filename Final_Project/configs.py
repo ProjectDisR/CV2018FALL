@@ -14,7 +14,7 @@ class DefaultConfig():
         
         self.dataset = 'kitti2012/training/'
         self.max_disp = 128
-        self.receptive_size = 11
+        self.receptive_size = 9
         self.num_workers = 0
         
         self.n_epoch = 20000
