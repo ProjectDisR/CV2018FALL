@@ -47,8 +47,6 @@ def train(**kwargs):
        
     model = Model()
     model = model.cuda()
-   
-    criterion = nn.CrossEntropyLoss()
     
     optimizer = t.optim.Adagrad(model.parameters(), opt.lr)
     
@@ -57,7 +55,7 @@ def train(**kwargs):
     
     if not os.path.exists(opt.ckpts):
         os.makedirs(opt.ckpts)
-        
+    
     for epoch in range(opt.n_epoch):
         print('epoch{} '.format(epoch), time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
         
@@ -74,8 +72,11 @@ def train(**kwargs):
             right = right.cuda()
             d = d.cuda()
             
-            output = model(left, right)
-            loss = criterion(output, d)
+            soft_label = t.zeros([1, opt.max_disp])
+            soft_label[0:4] = t.tensor([0.5, 0.3, 0.15, 0.05])
+            soft_label = soft_label.repeat(d.shape[0], 1)
+            output = model(left, right, train=True)
+            loss = -(output*soft_label).mean()
 
             optimizer.zero_grad()
             loss.backward()
@@ -93,7 +94,7 @@ def train(**kwargs):
             right = right.cuda()
             d = d.cuda()
             
-            output = model(left, right)
+            output = model(left, right, train=True)
             d_ = t.argmax(output, dim=1)
             
             accuracy_meter.update((d_ == d).sum().item()/d.shape[0], d.shape[0])

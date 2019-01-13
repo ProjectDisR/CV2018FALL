@@ -1,5 +1,9 @@
+import cv2
+
 import torch as t
 from torch import nn
+import torchvision as tv
+from torch.nn import functional as F
 
 class Model(nn.Module):
     
@@ -39,20 +43,25 @@ class Model(nn.Module):
         
         return
 
-    def forward(self, left, right):
+    def forward(self, left, right, train):
         
-        left = self.cnn(left)
-        left = left.squeeze()
-        left = left.view(left.shape[0], 1, -1)
-        
+        left = self.cnn(left)    
         right = self.cnn(right)
-        right = right.squeeze()
         
-        out = t.bmm(left, right)
-        out = out.squeeze()
+        if train:
+            
+            left = left.squeeze()
+            left = left.view(left.shape[0], 1, -1)
+            
+            right = right.squeeze()
         
-        return out
-    
+            out = t.bmm(left, right)
+            out = out.squeeze()
+            out = F.log_softmax(out, dim=1)
+        
+            return out
+        
+        return left, right
 
 if __name__ == '__main__':
     
@@ -61,5 +70,17 @@ if __name__ == '__main__':
     
     model = Model()
 
-    out = model(left, right)
+    out = model(left, right)[2]
     print('out:', out.shape)
+    
+    model = Model2()
+    right = cv2.imread('data/Synthetic/TL0.png')
+    left = cv2.imread('data/Synthetic/TR0.png')
+    transforms = tv.transforms.Compose([
+            tv.transforms.ToPILImage(),
+            tv.transforms.ToTensor(),
+            tv.transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+                ])
+    
+    left, right = model(transforms(left).unsqueeze(0), transforms(right).unsqueeze(0))
+    
