@@ -73,11 +73,10 @@ def train(**kwargs):
             d = d.cuda()
             
             soft_label = t.zeros([1, opt.max_disp+1])
-            soft_label[0, 0:4] = t.tensor([0.5, 0.3, 0.15, 0.05])
+            soft_label[0, 0:3] = t.tensor([0.5, 0.4, 0.1])
             soft_label = soft_label.repeat(d.shape[0], 1).cuda()
             output = model(left, right, train=True)
             loss = -(output*soft_label).sum(dim=1)
-            print(output[0:5, 0:5])
             loss = loss.mean()
 
             optimizer.zero_grad()
@@ -98,9 +97,8 @@ def train(**kwargs):
             
             output = model(left, right, train=True)
             d_ = t.argmax(output, dim=1)
-            print(d_)
             
-            accuracy_meter.update((d_ == d).sum().item()/d.shape[0], d.shape[0])
+            accuracy_meter.update((d_ == 0).sum().item()/d.shape[0], d.shape[0])
         
         vis.plot('loss', epoch, loss_meter.avg)
         vis.plot('accuracy', epoch, accuracy_meter.avg)
