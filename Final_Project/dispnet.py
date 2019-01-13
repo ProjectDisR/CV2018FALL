@@ -66,7 +66,7 @@ def train(**kwargs):
         loss_meter = AverageMeter()
         accuracy_meter = AverageMeter()
         
-        model = model.train()
+        model.train()
        
         for i, (left, right, d) in enumerate(dataloaders['train']):
             
@@ -85,7 +85,7 @@ def train(**kwargs):
             
         t.save(model.state_dict(), os.path.join(opt.ckpts, '{}.ckpt'.format(epoch)))
         
-        model = model.eval()
+        model.eval()
         
         for i, (left, right, d) in enumerate(dataloaders['valid']):
             
