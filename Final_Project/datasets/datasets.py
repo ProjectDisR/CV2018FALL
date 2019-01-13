@@ -74,7 +74,8 @@ class KITTI2012(Dataset):
                 :right_patch.shape[1], :] = right_patch
                      
         right_padded = self.transforms(right_padded)
-
+        
+        print(left_padded[:,:,0])
         return left_padded, right_padded, int(d)
 
 def get_loaders(data_path, receptive_size, cardinality, batch_size, 
