@@ -41,8 +41,7 @@ def train(**kwargs):
     opt = DefaultConfig()
     opt.parse(kwargs)
     
-    data_root = os.path.join('datasets/', opt.dataset)
-    
+    data_root = os.path.join('datasets/', opt.dataset)  
     dataloaders = get_loaders(data_root, opt.receptive_size, opt.max_disp, opt.batch_size, opt.num_workers)
        
     model = Model()
