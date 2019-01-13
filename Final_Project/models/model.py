@@ -12,13 +12,13 @@ class Model(nn.Module):
         
         self.cnn = nn.Sequential(
             nn.Conv2d(3, 32, kernel_size=3),
-            nn.BatchNorm2d(32),
+#            nn.BatchNorm2d(32),
             nn.ReLU(inplace=True),
             nn.Conv2d(32, 32, kernel_size=3),
-            nn.BatchNorm2d(32),
+#            nn.BatchNorm2d(32),
             nn.ReLU(inplace=True),
             nn.Conv2d(32, 64, kernel_size=3),
-            nn.BatchNorm2d(64),
+#            nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
             nn.Conv2d(64, 64, kernel_size=3)
             )
