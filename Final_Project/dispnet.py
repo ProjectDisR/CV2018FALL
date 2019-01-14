@@ -99,7 +99,7 @@ def train(**kwargs):
             
             loss_meter.update(loss.item(), d.shape[0])
         
-        if epoch % 5 == 1:
+        if epoch % 50 == 1:
             model.eval()
             
             for i in range(10):

@@ -17,7 +17,7 @@ class DefaultConfig():
         self.receptive_size = 11
         self.num_workers = 0
         
-        self.n_epoch = 252
+        self.n_epoch = 20000
         self.batch_size = 64
         self.lr = 0.01
         self.exp_decay_at_epoch = int(self.n_epoch*3/4)
