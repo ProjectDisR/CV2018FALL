@@ -39,7 +39,7 @@ def computeDisp(Il, Ir):
             curDisp = 0
             MaxCos = -np.inf
             for d in range(min(j,64)):
-                cosine = featureL[:,i,j] * featureR[:,i,j-d]
+                cosine = np.sum(featureL[:,i,j] * featureR[:,i,j-d])
                 if cosine > MaxCos:
                     curDisp = d
                     MaxCos = cosine
