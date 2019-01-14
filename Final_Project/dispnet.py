@@ -26,6 +26,14 @@ from util import writePFM
 
 import fire
 
+def hisEqulColor(img):
+	ycrcb = cv2.cvtColor(img, cv2.COLOR_BGR2YCR_CB)
+	channels = cv2.split(ycrcb)
+	print(len(channels))
+	cv2.equalizeHist(channels[0], channels[0])
+	cv2.merge(channels, ycrcb)
+	cv2.cvtColor(ycrcb, cv2.COLOR_YCR_CB2BGR, img)
+	return img
 
 def adjust_lr_exp(optimizer, base_lr, ep, total_ep, start_decay_at_ep):
     assert ep >= 1, "Current epoch number should be >= 1"
@@ -96,6 +104,9 @@ def train(**kwargs):
                 print(i)
                 img_left = cv2.imread(os.path.join(opt.test, 'TL{}.png'.format(i)))
                 img_right = cv2.imread(os.path.join(opt.test, 'TR{}.png'.format(i)))
+                img_left = hisEqulColor(img_left)
+                img_right = hisEqulColor(img_right)
+                
                 disp = computeDisp(img_left, img_right)
                 writePFM(os.path.join(opt.test, 'TL{}.pfm'.format(i)), disp)
                 
