@@ -45,7 +45,7 @@ def computeDisp(Il, Ir):
                     curDisp = d
                     MaxCos = cosine
             disp[i,j] = curDisp
-    return disp
+    return disp.astype(np.float32)
 
 
 def main():
