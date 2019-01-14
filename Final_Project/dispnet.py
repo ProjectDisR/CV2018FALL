@@ -66,7 +66,6 @@ def train(**kwargs):
         adjust_lr_exp(optimizer, opt.lr, epoch + 1, opt.n_epoch, opt.exp_decay_at_epoch)
         
         loss_meter = AverageMeter()
-        accuracy_meter = AverageMeter()
         
         model.train()
        
@@ -104,9 +103,8 @@ def train(**kwargs):
             t.save(model.state_dict(), os.path.join(opt.ckpts, 'best.ckpt'))
         
         vis.plot('loss', epoch, loss_meter.avg)
-        vis.plot('accuracy', epoch, accuracy_meter.avg)
         vis.plot('err', epoch, err)
-        vis.log('epoch:{}, loss:{}, accuracy:{}, err:{}'.format(epoch, loss_meter.avg, accuracy_meter.avg, err))
+        vis.log('epoch:{}, loss:{}, err:{}'.format(epoch, loss_meter.avg, err))
         
     return
 
