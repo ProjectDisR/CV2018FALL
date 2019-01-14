@@ -39,13 +39,13 @@ class Model(nn.Module):
         if train:
             
             left = left.squeeze()
+            print(left[0:5, 0:5])
             left = left.view(left.shape[0], 1, -1)
             
             right = right.squeeze()
         
             out = t.bmm(left, right)
             out = out.squeeze()
-            print(out[0:5, 0:10].data.cpu().numpy())
             out = F.log_softmax(out, dim=1)
         
             return out
