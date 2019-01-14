@@ -10,11 +10,11 @@ def test(path):
         disp = readPFM(os.path.join(path, o_img + str(i) + ".pfm"))
         GT = readPFM(os.path.join(path, o_img + "D" + str(i) + ".pfm"))
         err = cal_avgerr(GT, disp)
-        print( (o_img + " error : ") ,err)
+        print( (o_img + str(i) + " err: ") ,err)
         Ave_err += err
-        print("Average error : ", Ave_err/img_num)
+        print("Average err: ", Ave_err/img_num)
         
-        return Ave_err/img_num
+    return Ave_err/img_num
 
 
 def cal_avgerr(GT, disp):
