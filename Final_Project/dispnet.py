@@ -58,6 +58,7 @@ def train(**kwargs):
     if not os.path.exists(opt.ckpts):
         os.makedirs(opt.ckpts)
     
+    t.save(model.state_dict(), os.path.join(opt.ckpts, 'best.ckpt'))
     besterr = 100
     for epoch in range(opt.n_epoch):
         print('epoch{} '.format(epoch), time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
