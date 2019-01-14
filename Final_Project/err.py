@@ -2,7 +2,7 @@ import numpy as np
 import re
 import os
 
-def test(path):
+def ERR(path):
     o_img = "TL"
     Ave_err = 0
     img_num = 10

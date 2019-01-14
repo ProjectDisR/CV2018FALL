@@ -21,18 +21,21 @@ from utils.visualize import Visualizer
 from utils.meters import AverageMeter
 
 from main import computeDisp
-from test import test
+from err import ERR
 from util import writePFM
 
 import fire
 
 def hisEqulColor(img):
+    
 	ycrcb = cv2.cvtColor(img, cv2.COLOR_BGR2YCR_CB)
 	channels = cv2.split(ycrcb)
 	cv2.equalizeHist(channels[0], channels[0])
 	cv2.merge(channels, ycrcb)
 	cv2.cvtColor(ycrcb, cv2.COLOR_YCR_CB2BGR, img)
+    
 	return img
+
 
 def adjust_lr_exp(optimizer, base_lr, ep, total_ep, start_decay_at_ep):
     assert ep >= 1, "Current epoch number should be >= 1"
@@ -66,7 +69,7 @@ def train(**kwargs):
         os.makedirs(opt.ckpts)
     
     t.save(model.state_dict(), os.path.join(opt.ckpts, 'best.ckpt'))
-    besterr = 100
+    besterr = 100.0
     for epoch in range(opt.n_epoch):
         print('epoch{} '.format(epoch), time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
         
@@ -96,20 +99,23 @@ def train(**kwargs):
             
             loss_meter.update(loss.item(), d.shape[0])
         
-        if epoch % 50 == 1:
+        if epoch % 5 == 1:
             model.eval()
             
             for i in range(10):
                 print(i)
+                
                 img_left = cv2.imread(os.path.join(opt.test, 'TL{}.png'.format(i)))
                 img_right = cv2.imread(os.path.join(opt.test, 'TR{}.png'.format(i)))
                 img_left = hisEqulColor(img_left)
                 img_right = hisEqulColor(img_right)
                 
                 disp = computeDisp(img_left, img_right)
+                disp = cv2.medianBlur(np.uint8(disp), 5)
+                disp = disp.astype(np.float32)
                 writePFM(os.path.join(opt.test, 'TL{}.pfm'.format(i)), disp)
                 
-            err = test(opt.test)
+            err = ERR(opt.testdata)
             if err < besterr:
                 t.save(model.state_dict(), os.path.join(opt.ckpts, 'best.ckpt'))
                 
@@ -118,6 +124,7 @@ def train(**kwargs):
         vis.plot('loss', epoch, loss_meter.avg)
         
     return
+
 
 def help():
         
