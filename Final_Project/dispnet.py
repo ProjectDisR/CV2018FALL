@@ -6,6 +6,7 @@ Created on Mon Sep  3 22:25:09 2018
 """
 import os
 import time
+import cv2
 
 import numpy as np
 
@@ -19,7 +20,9 @@ from models.model import Model
 from utils.visualize import Visualizer
 from utils.meters import AverageMeter
 
-from skimage.io import imsave
+from main import computeDisp
+from test import test
+from util import writePFM
 
 import fire
 
@@ -50,11 +53,12 @@ def train(**kwargs):
     optimizer = t.optim.Adagrad(model.parameters(), opt.lr)
     
     vis = Visualizer(opt.env, opt.port)
-    vis.add_wins('loss', 'accuracy')
+    vis.add_wins('loss', 'accuracy', 'err')
     
     if not os.path.exists(opt.ckpts):
         os.makedirs(opt.ckpts)
     
+    besterr = 100
     for epoch in range(opt.n_epoch):
         print('epoch{} '.format(epoch), time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
         
@@ -84,43 +88,27 @@ def train(**kwargs):
             optimizer.step()
             
             loss_meter.update(loss.item(), d.shape[0])
-            
-        t.save(model.state_dict(), os.path.join(opt.ckpts, '{}.ckpt'.format(epoch)))
         
         model.eval()
         
-        for i, (left, right, d) in enumerate(dataloaders['valid']):
+        for i in range(10):
+            img_left = cv2.imread(os.path.join(opt.test, 'TL{}.png'.format(i)))
+            img_right = cv2.imread(os.path.join(opt.test, 'TR{}.png'.format(i)))
+            disp = computeDisp(img_left, img_right)
+            writePFM('TL{}.pfm'.format(i), disp)
             
-            left = left.cuda()
-            right = right.cuda()
-            d = d.cuda()
-            
-            output = model(left, right, train=True)
-            d_ = t.argmax(output, dim=1)
-            
-            accuracy_meter.update((d_ == 0).sum().item()/d.shape[0], d.shape[0])
+        err = test(opt.test)
+        if err < besterr:
+            t.save(model.state_dict(), os.path.join(opt.ckpts, 'best.ckpt'))
         
         vis.plot('loss', epoch, loss_meter.avg)
         vis.plot('accuracy', epoch, accuracy_meter.avg)
-        vis.log('epoch:{}, loss:{}, accuracy:{}'.format(epoch, loss_meter.avg, accuracy_meter.avg))
+        vis.plot('err', epoch, err)
+        vis.log('epoch:{}, loss:{}, accuracy:{}, err:{}'.format(epoch, loss_meter.avg, accuracy_meter.avg, err))
         
     return
 
-
-def test(**kwargs):
-            
-    return
-
-
 def help():
-    print("""
-    usage : python {0} <function> [--args=value]
-    <function> := train | test | help
-    example: 
-            python {0} train --env='env0701' --lr=0.01
-            python {0} test
-            python {0} help
-    avaiable args:\n""".format(__file__))
         
     opt = DefaultConfig()
     opt.print_config()

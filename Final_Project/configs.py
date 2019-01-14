@@ -23,6 +23,7 @@ class DefaultConfig():
         self.exp_decay_at_epoch = int(self.n_epoch*3/4)
         
         self.ckpts = 'ckpts/'
+        self.test = 'data/Synthetic/'
         
         return
     
