@@ -105,15 +105,15 @@ def train(**kwargs):
             for i in range(10):
                 print(i)
                 
-                img_left = cv2.imread(os.path.join(opt.test, 'TL{}.png'.format(i)))
-                img_right = cv2.imread(os.path.join(opt.test, 'TR{}.png'.format(i)))
+                img_left = cv2.imread(os.path.join(opt.testdata, 'TL{}.png'.format(i)))
+                img_right = cv2.imread(os.path.join(opt.testdata, 'TR{}.png'.format(i)))
                 img_left = hisEqulColor(img_left)
                 img_right = hisEqulColor(img_right)
                 
                 disp = computeDisp(img_left, img_right)
                 disp = cv2.medianBlur(np.uint8(disp), 5)
                 disp = disp.astype(np.float32)
-                writePFM(os.path.join(opt.test, 'TL{}.pfm'.format(i)), disp)
+                writePFM(os.path.join(opt.testdata, 'TL{}.pfm'.format(i)), disp)
                 
             err = ERR(opt.testdata)
             if err < besterr:
