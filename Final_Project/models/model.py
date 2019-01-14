@@ -45,7 +45,7 @@ class Model(nn.Module):
         
             out = t.bmm(left, right)
             out = out.squeeze()
-            print(out[0:5, 0:10].data.numpy())
+            print(out[0:5, 0:10].data.cpu().numpy())
             out = F.log_softmax(out, dim=1)
         
             return out
