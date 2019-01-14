@@ -111,7 +111,7 @@ def train(**kwargs):
                 img_right = hisEqulColor(img_right)
                 
                 disp = computeDisp(img_left, img_right)
-                disp = cv2.medianBlur(np.uint8(disp), 5)
+                disp = cv2.medianBlur(np.uint8(disp), 17)
                 disp = disp.astype(np.float32)
                 writePFM(os.path.join(opt.testdata, 'TL{}.pfm'.format(i)), disp)
                 
