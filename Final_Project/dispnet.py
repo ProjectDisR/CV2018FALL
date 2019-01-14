@@ -89,22 +89,23 @@ def train(**kwargs):
             
             loss_meter.update(loss.item(), d.shape[0])
         
-        model.eval()
-        
-        for i in range(10):
-            print(i)
-            img_left = cv2.imread(os.path.join(opt.test, 'TL{}.png'.format(i)))
-            img_right = cv2.imread(os.path.join(opt.test, 'TR{}.png'.format(i)))
-            disp = computeDisp(img_left, img_right)
-            writePFM(os.path.join(opt.test, 'TL{}.pfm'.format(i)), disp)
+        if epoch % 50 == 1:
+            model.eval()
             
-        err = test(opt.test)
-        if err < besterr:
-            t.save(model.state_dict(), os.path.join(opt.ckpts, 'best.ckpt'))
+            for i in range(10):
+                print(i)
+                img_left = cv2.imread(os.path.join(opt.test, 'TL{}.png'.format(i)))
+                img_right = cv2.imread(os.path.join(opt.test, 'TR{}.png'.format(i)))
+                disp = computeDisp(img_left, img_right)
+                writePFM(os.path.join(opt.test, 'TL{}.pfm'.format(i)), disp)
+                
+            err = test(opt.test)
+            if err < besterr:
+                t.save(model.state_dict(), os.path.join(opt.ckpts, 'best.ckpt'))
+                
+            vis.plot('err', epoch, err)
         
         vis.plot('loss', epoch, loss_meter.avg)
-        vis.plot('err', epoch, err)
-        vis.log('epoch:{}, loss:{}, err:{}'.format(epoch, loss_meter.avg, err))
         
     return
 
