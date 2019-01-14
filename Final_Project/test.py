@@ -12,7 +12,7 @@ def test(path):
         err = cal_avgerr(GT, disp)
         print( (o_img + str(i) + " err: ") ,err)
         Ave_err += err
-        print("Average err: ", Ave_err/img_num)
+    print("Average err: ", Ave_err/img_num)
         
     return Ave_err/img_num
 
