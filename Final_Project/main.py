@@ -2,6 +2,11 @@ import numpy as np
 import argparse
 import cv2
 import time
+import torch
+import torchvision as tv
+
+from models.model import Model
+
 from util import writePFM
 
 parser = argparse.ArgumentParser(description='Disparity Estimation')
@@ -13,16 +18,37 @@ parser.add_argument('--output', default='./TL0.pfm', type=str, help='left dispar
 # You can modify the function interface as you like
 def computeDisp(Il, Ir):
     h, w, ch = Il.shape
-    disp = np.zeros((h, w), dtype=np.int32)
-
-    # TODO: Some magic
-
+    model = Model()
+    model.cuda().eval()
+    model.load_state_dict(torch.load('ckpts/300.ckpt'))
+    Il = (cv2.copyMakeBorder(Il,4,4,4,4,cv2.BORDER_REFLECT)).astype(np.float32)
+    Ir = (cv2.copyMakeBorder(Ir,4,4,4,4,cv2.BORDER_REFLECT)).astype(np.float32)
+    transforms = tv.transforms.Compose([
+        tv.transforms.ToPILImage(),
+        tv.transforms.ToTensor(),
+        tv.transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        ])
+    Il = transforms(Il).unsqueeze(0)
+    Ir = transforms(Ir).unsqueeze(0)
+    featureL, featureR = model(Il,Ir)
+    featureL = featureL.squeeze().data.cpu().numpy
+    featureR = featureR.squeeze().data.cpu().numpy
+    disp = np.zeros((h,w))
+    for i in range(h):
+        for j in range(w):
+            curDisp = 0
+            MaxCos = -np.inf
+            for d in range(min(i,64)):
+                cosine = featureL[:,h,w] * featureR[:,h,w-d]
+                if cosine > MaxCos:
+                    curDisp = d
+                    MaxCos = cosine
+            disp[h,w] = curDisp
     return disp
 
 
 def main():
     args = parser.parse_args()
-
     print(args.output)
     print('Compute disparity for %s' % args.input_left)
     img_left = cv2.imread(args.input_left)
