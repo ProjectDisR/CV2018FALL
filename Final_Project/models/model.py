@@ -39,7 +39,6 @@ class Model(nn.Module):
         if train:
             
             left = left.squeeze()
-            print(left[0:5, 0:5])
             left = left.view(left.shape[0], 1, -1)
             
             right = right.squeeze()
