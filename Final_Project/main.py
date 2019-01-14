@@ -43,7 +43,7 @@ def computeDisp(Il, Ir):
                 if cosine > MaxCos:
                     curDisp = d
                     MaxCos = cosine
-            disp[h,w] = curDisp
+            disp[i,j] = curDisp
     return disp
 
 
