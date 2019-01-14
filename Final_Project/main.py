@@ -28,8 +28,8 @@ def computeDisp(Il, Ir):
         tv.transforms.ToTensor(),
         tv.transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ])
-    Il = transforms(Il).unsqueeze(0)
-    Ir = transforms(Ir).unsqueeze(0)
+    Il = transforms(Il).unsqueeze(0).cuda()
+    Ir = transforms(Ir).unsqueeze(0).cuda()
     featureL, featureR = model(Il,Ir, train=False)
     featureL = featureL.squeeze().data.cpu().numpy
     featureR = featureR.squeeze().data.cpu().numpy
