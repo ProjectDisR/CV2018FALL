@@ -45,6 +45,7 @@ def computeDisp(Il, Ir):
                     curDisp = d
                     MaxCos = cosine
             disp[i,j] = curDisp
+    disp = cv2.medianBlur(np.uint8(disp),5)
     return disp.astype(np.float32)
 
 
