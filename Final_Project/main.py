@@ -21,8 +21,8 @@ def computeDisp(Il, Ir):
     model = Model()
     model.cuda().eval()
     model.load_state_dict(torch.load('ckpts/300.ckpt'))
-    Il = (cv2.copyMakeBorder(Il,4,4,4,4,cv2.BORDER_REFLECT)).astype(np.float32)
-    Ir = (cv2.copyMakeBorder(Ir,4,4,4,4,cv2.BORDER_REFLECT)).astype(np.float32)
+    Il = (cv2.copyMakeBorder(Il,4,4,4,4,cv2.BORDER_REFLECT)).astype(np.uint8)
+    Ir = (cv2.copyMakeBorder(Ir,4,4,4,4,cv2.BORDER_REFLECT)).astype(np.uint8)
     transforms = tv.transforms.Compose([
         tv.transforms.ToPILImage(),
         tv.transforms.ToTensor(),
