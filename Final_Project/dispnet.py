@@ -93,10 +93,11 @@ def train(**kwargs):
         model.eval()
         
         for i in range(10):
+            print(i)
             img_left = cv2.imread(os.path.join(opt.test, 'TL{}.png'.format(i)))
             img_right = cv2.imread(os.path.join(opt.test, 'TR{}.png'.format(i)))
             disp = computeDisp(img_left, img_right)
-            writePFM('TL{}.pfm'.format(i), disp)
+            writePFM(os.path.join(opt.test, 'TL{}.pfm'.format(i)), disp)
             
         err = test(opt.test)
         if err < besterr:
