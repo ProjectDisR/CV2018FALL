@@ -31,6 +31,7 @@ def computeDisp(Il, Ir):
     Il = transforms(Il).unsqueeze(0).cuda()
     Ir = transforms(Ir).unsqueeze(0).cuda()
     featureL, featureR = model(Il,Ir, train=False)
+    print(featureL.shape)
     featureL = featureL.squeeze().data.cpu().numpy()
     featureR = featureR.squeeze().data.cpu().numpy()
     disp = np.zeros((h,w))
