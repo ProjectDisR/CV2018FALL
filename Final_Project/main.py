@@ -30,7 +30,7 @@ def computeDisp(Il, Ir):
         ])
     Il = transforms(Il).unsqueeze(0)
     Ir = transforms(Ir).unsqueeze(0)
-    featureL, featureR = model(Il,Ir)
+    featureL, featureR = model(Il,Ir, train=False)
     featureL = featureL.squeeze().data.cpu().numpy
     featureR = featureR.squeeze().data.cpu().numpy
     disp = np.zeros((h,w))
