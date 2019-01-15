@@ -114,10 +114,11 @@ def train(**kwargs):
                 img_left_1 = np.fliplr(img_right)
                 img_right_1 = np.fliplr(img_left)
                 
-                disp = computeDisp(img_left, img_right)
-                disp = np.uint8(disp)
+                disp = computeDisp(img_left, img_right)              
                 disp_1 = computeDisp(img_left_1, img_right_1)
                 disp_1 = np.fliplr(disp_1)
+                
+                disp = np.uint8(disp)
                 disp_1 = np.uint8(disp_1)
 
                 disp = Optimize(img_left,disp,disp_1)
