@@ -29,8 +29,9 @@ def hisEqulColor(img):
 def computeDisp(Il, Ir):
     h, w, ch = Il.shape
     model = Model()
-    model.cuda().eval()
+    model.cuda()
     model.load_state_dict(torch.load('ckpts/best.ckpt'))
+    model.cuda().eval()
     Il = (cv2.copyMakeBorder(Il,5,5,5,5,cv2.BORDER_REFLECT)).astype(np.uint8)
     Ir = (cv2.copyMakeBorder(Ir,5,5,5,5,cv2.BORDER_REFLECT)).astype(np.uint8)
     transforms = tv.transforms.Compose([

@@ -13,6 +13,7 @@ import numpy as np
 import torch as t
 from torch.utils.data import DataLoader
 from torch import nn
+import torchvision as tv
 
 from configs import DefaultConfig
 from datasets.datasets import get_loaders
@@ -20,7 +21,6 @@ from models.model import Model
 from utils.visualize import Visualizer
 from utils.meters import AverageMeter
 
-from main import computeDisp
 from err import ERR
 from optimize import Optimize
 from util import writePFM
@@ -48,6 +48,35 @@ def adjust_lr_exp(optimizer, base_lr, ep, total_ep, start_decay_at_ep):
         g['lr'] = (base_lr * (0.001 ** (float(ep + 1 - start_decay_at_ep) / (total_ep + 1 - start_decay_at_ep))))
     
     return
+
+
+def computeDisp(Il, Ir, model):
+    h, w, ch = Il.shape
+    Il = (cv2.copyMakeBorder(Il,5,5,5,5,cv2.BORDER_REFLECT)).astype(np.uint8)
+    Ir = (cv2.copyMakeBorder(Ir,5,5,5,5,cv2.BORDER_REFLECT)).astype(np.uint8)
+    transforms = tv.transforms.Compose([
+        tv.transforms.ToPILImage(),
+        tv.transforms.ToTensor(),
+        tv.transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        ])
+    Il = transforms(Il).unsqueeze(0).cuda()
+    Ir = transforms(Ir).unsqueeze(0).cuda()
+    featureL, featureR = model(Il,Ir, train=False)
+    featureL = featureL.squeeze().data.cpu().numpy()
+    featureR = featureR.squeeze().data.cpu().numpy()
+    disp = np.zeros((h,w))
+    for i in range(h):
+        for j in range(w):
+            curDisp = 0
+            MaxCos = -np.inf
+            for d in range(min(j,64)):
+                cosine = np.sum(featureL[:,i,j] * featureR[:,i,j-d])
+                if cosine > MaxCos:
+                    curDisp = d
+                    MaxCos = cosine
+            disp[i,j] = curDisp   
+    
+    return disp
 
 
 def train(**kwargs):
@@ -114,8 +143,8 @@ def train(**kwargs):
                 img_left_1 = np.fliplr(img_right)
                 img_right_1 = np.fliplr(img_left)
                 
-                disp = computeDisp(img_left, img_right)              
-                disp_1 = computeDisp(img_left_1, img_right_1)
+                disp = computeDisp(img_left, img_right, model)              
+                disp_1 = computeDisp(img_left_1, img_right_1, model)
                 disp_1 = np.fliplr(disp_1)
                 
                 disp = np.int32(disp)
