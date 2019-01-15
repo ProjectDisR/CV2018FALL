@@ -115,9 +115,10 @@ def train(**kwargs):
                 img_right_1 = np.fliplr(img_left)
                 
                 disp = computeDisp(img_left, img_right)
+                disp = np.uint8(disp)
                 disp_1 = computeDisp(img_left_1, img_right_1)
-
                 disp_1 = np.fliplr(disp_1)
+                disp_1 = np.uint8(disp_1)
 
                 disp = Optimize(img_left,disp,disp_1)
                 disp = cv2.medianBlur(np.uint8(disp), 11)
