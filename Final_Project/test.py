@@ -45,7 +45,7 @@ def test():
         disp_1 = np.int32(disp_1)
 
         disp = Optimize(img_left,disp,disp_1)
-        disp = cv2.medianBlur(np.uint8(disp), 3)
+        disp = cv2.medianBlur(np.uint8(disp), 7)
         disp = disp.astype(np.float32)
         
         writePFM(os.path.join('data/Synthetic/', 'TL{}.pfm'.format(i)), disp)
