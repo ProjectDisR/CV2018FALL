@@ -4,7 +4,7 @@ import numpy as np
 import cv2
 import time
 import matplotlib.pyplot as plt
-from cv2.ximgproc import guidedFilter
+#from cv2.ximgproc import guidedFilter
 from numpy import matlib
 import math
 
