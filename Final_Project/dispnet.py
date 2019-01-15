@@ -151,7 +151,7 @@ def train(**kwargs):
                 disp_1 = np.int32(disp_1)
 
                 disp = Optimize(img_left,disp,disp_1)
-                disp = cv2.medianBlur(np.uint8(disp), 11)
+                disp = cv2.medianBlur(np.uint8(disp), 15)
                 disp = disp.astype(np.float32)
                 
                 writePFM(os.path.join(opt.testdata, 'TL{}.pfm'.format(i)), disp)

@@ -73,7 +73,7 @@ def Disparity(img_left, img_right):
     disp_1 = np.int32(disp_1)
 
     disp = Optimize(img_left,disp,disp_1)
-    disp = cv2.medianBlur(np.uint8(disp), 11)
+    disp = cv2.medianBlur(np.uint8(disp), 15)
     disp = disp.astype(np.float32)
     
     return disp
