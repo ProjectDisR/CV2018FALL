@@ -53,3 +53,5 @@ def test():
     err = ERR('data/Synthetic/')
     
     return err
+
+test()
