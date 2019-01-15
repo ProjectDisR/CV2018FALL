@@ -22,6 +22,7 @@ from utils.meters import AverageMeter
 
 from main import computeDisp
 from err import ERR
+from optimize import Optimize
 from util import writePFM
 
 import fire
@@ -109,15 +110,27 @@ def train(**kwargs):
                 img_right = cv2.imread(os.path.join(opt.testdata, 'TR{}.png'.format(i)))
                 img_left = hisEqulColor(img_left)
                 img_right = hisEqulColor(img_right)
+                # Mirror image
+                img_left_1 = np.fliplr(img_right)
+                img_right_1 = np.fliplr(img_left)
                 
-                disp = computeDisp(img_left, img_right)
-                disp = cv2.medianBlur(np.uint8(disp), 9)
+                disp = computeDisp(img_left, img_right)              
+                disp_1 = computeDisp(img_left_1, img_right_1)
+                disp_1 = np.fliplr(disp_1)
+                
+                disp = np.int32(disp)
+                disp_1 = np.int32(disp_1)
+
+                disp = Optimize(img_left,disp,disp_1)
+                disp = cv2.medianBlur(np.uint8(disp), 11)
                 disp = disp.astype(np.float32)
+                
                 writePFM(os.path.join(opt.testdata, 'TL{}.pfm'.format(i)), disp)
                 
             err = ERR(opt.testdata)
             if err < besterr:
                 t.save(model.state_dict(), os.path.join(opt.ckpts, 'best.ckpt'))
+                besterr = err
                 
             vis.plot('err', epoch, err)
         
